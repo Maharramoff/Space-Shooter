@@ -1,0 +1,10 @@
+body
+{
+    background: darkslategrey;
+}
+
+#game-wrapper
+{
+    width: 600px;
+    margin: 0 auto;
+}
