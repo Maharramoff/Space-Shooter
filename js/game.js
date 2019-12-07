@@ -5,9 +5,8 @@ const backgroundImage = new Image();
 backgroundImage.src = 'img/space.png';
 
 // Load the asteroid tileset
-let gameTileset = new Image();
+const gameTileset = new Image();
 gameTileset.src = 'img/sheet.png';
-
 
 window.onload = function ()
 {
@@ -21,16 +20,23 @@ function game()
     requestAnimationFrame(game);
 }
 
-let asteroid = {x: 0, y: 250, dx: 1, dy: 2, h: 45, w: 55};
+let asteroids = [
+    { x: 0, y: 250, sx: 0, sy: 618, sw: 119, sh: 97, dx: 10, dy: 20, h: 45, w: 55 },
+    { x: 0, y: 250, sx: 326, sy: 549, sw: 99, sh: 95, dx: 5, dy: 10, h: 53, w: 55 },
+];
 
 function update()
 {
-    asteroid.x += asteroid.dx;
-    asteroid.y += asteroid.dy;
+    for (let i in asteroids)
+    {
+        asteroids[i].x += asteroids[i].dx;
+        asteroids[i].y += asteroids[i].dy;
 
-    // Asteroid bounds
-    if (asteroid.x + asteroid.w >= 600 || asteroid.x <= 0) asteroid.dx = -asteroid.dx;
-    if (asteroid.y + asteroid.h >= 600 || asteroid.y <= 0) asteroid.dy = -asteroid.dy;
+        // Asteroid bounds
+        if (asteroids[i].x + asteroids[i].w >= 600 || asteroids[i].x <= 0) asteroids[i].dx = -asteroids[i].dx;
+        if (asteroids[i].y + asteroids[i].h >= 600 || asteroids[i].y <= 0) asteroids[i].dy = -asteroids[i].dy;
+    }
+
 }
 
 function draw()
@@ -38,17 +44,17 @@ function draw()
     // Draw background
     context.drawImage(backgroundImage, 0, 0, 600, 600);
 
-    // Draw asteroids
-    context.drawImage(
-      gameTileset, //The image file
-      0, 618, //The source x and y position
-      119, 97, //The source height and width
-      asteroid.x, asteroid.y, //The destination x and y position
-      asteroid.h, asteroid.w //The destination height and width
-    );
-
-
-
+    for (let i in asteroids)
+    {
+        // Draw asteroids
+        context.drawImage(
+          gameTileset, //The image file
+          asteroids[i].sx, asteroids[i].sy, //The source x and y position
+          asteroids[i].sw, asteroids[i].sh, //The source width and height
+          asteroids[i].x, asteroids[i].y, //The destination x and y position
+          asteroids[i].h, asteroids[i].w //The destination height and width
+        );
+    }
 }
 
 // requestAnimationFrame polyfill
