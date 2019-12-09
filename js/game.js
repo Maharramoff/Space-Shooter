@@ -1,6 +1,7 @@
 const canvas = document.getElementById('game');
 const context = canvas.getContext('2d');
 const spawnFrame = 30;
+const bulletExplosionFrame = 5;
 const stage = { x: 600, y: 600 };
 const bulletSpeed = 15;
 
@@ -19,7 +20,10 @@ document.addEventListener('mousedown', mouseClick, false)
 // Entities coordinates
 const ship = { sx: 0, sy: 942, sw: 112, sh: 74, h: 40, w: 60 };
 const bullet = { sx: 856, sy: 602, sw: 9, sh: 37, h: 37, w: 9 };
-
+const bulletExplosion = [
+  { sx: 603, sy: 600, sw: 46, sh: 46, h: 46, w: 46 },
+  { sx: 581, sy: 661, sw: 46, sh: 46, h: 46, w: 46 },
+];
 const asteroids = [
     { sx: 0, sy: 618, sw: 119, sh: 97, h: 45, w: 55 },
     { sx: 326, sy: 549, sw: 99, sh: 95, h: 53, w: 55 },
@@ -42,11 +46,17 @@ function game()
 
 let asteroidList = [];
 let bulletList   = [];
+let bulletExplosionList = [];
 let timer = 0;
 
 function update()
 {
     timer++;
+
+    if (timer % bulletExplosionFrame === 0)
+    {
+        bulletExplosionList = [];
+    }
 
     if (timer % spawnFrame === 0)
     {
@@ -86,6 +96,10 @@ function update()
                   bulletList[b].y < asteroidList[i].y + asteroidList[i].h - (bullet.h % 10)
                 )
                 {
+                    // Bullet explosion
+                    bulletExplosionList.push({x: bulletList[b].x, y: bulletList[b].y});
+
+                    // Remove collided elements
                     bulletList.splice(b, 1);
                     asteroidList.splice(i, 1);
                 }
@@ -116,6 +130,26 @@ function draw()
       ship.x,
       ship.y,
       ship.w, ship.h);
+
+    // Draw bullet explosions
+    for (let e in bulletExplosionList)
+    {
+        context.drawImage(
+          spriteSheet,
+          bulletExplosion[0].sx, bulletExplosion[0].sy,
+          bulletExplosion[0].sw, bulletExplosion[0].sh,
+          bulletExplosionList[e].x - bulletExplosion[0].w / 2, bulletExplosionList[e].y - bulletExplosion[0].h / 2,
+          bulletExplosion[0].w, bulletExplosion[0].h
+        );
+
+        context.drawImage(
+          spriteSheet,
+          bulletExplosion[1].sx, bulletExplosion[1].sy,
+          bulletExplosion[1].sw, bulletExplosion[1].sh,
+          bulletExplosionList[e].x - bulletExplosion[1].w / 2, bulletExplosionList[e].y - bulletExplosion[1].h / 2,
+          bulletExplosion[1].w, bulletExplosion[1].h
+        );
+    }
 
     for (let i in asteroidList)
     {
