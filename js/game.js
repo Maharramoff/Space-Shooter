@@ -2,7 +2,7 @@ const canvas = document.getElementById('game');
 const context = canvas.getContext('2d');
 const spawnFrame = 30;
 const stage = { x: 600, y: 600 };
-const bulletSpeed = 20;
+const bulletSpeed = 15;
 
 // Background image
 const backgroundImage = new Image();
@@ -62,6 +62,7 @@ function update()
         asteroidList.push({ ...randomAsteroid, ...genObject });
     }
 
+
     for (let i in asteroidList)
     {
         // Asteroids physics
@@ -70,6 +71,26 @@ function update()
 
         // Remove the asteroids that are out of stage.
         if (asteroidList[i].x + asteroidList[i].w < 0 || asteroidList[i].x > 600 || asteroidList[i].y > 600) asteroidList.splice(i, 1);
+
+
+        // Check if target shot down
+        for (let b in bulletList)
+        {
+            if(asteroidList.hasOwnProperty(i) && bulletList.hasOwnProperty(b))
+            {
+                if (
+                  bulletList[b].x > asteroidList[i].x
+                  &&
+                  bulletList[b].x < asteroidList[i].x + asteroidList[i].w
+                  &&
+                  bulletList[b].y < asteroidList[i].y + asteroidList[i].h - (bullet.h % 10)
+                )
+                {
+                    bulletList.splice(b, 1);
+                    asteroidList.splice(i, 1);
+                }
+            }
+        }
     }
 
     for (let b in bulletList)
@@ -79,7 +100,7 @@ function update()
         bulletList[b].y -= bulletList[b].dy;
 
         // Remove the bullets that are out of stage.
-        if (bulletList[b].x + bulletList[b].w < 0 || bulletList[b].x > 600 || bulletList[b].y > 600) bulletList.splice(b, 1);
+        if (bulletList[b].x + bulletList[b].w < 0 || bulletList[b].x > 600 || bulletList[b].y < 0) bulletList.splice(b, 1);
     }
 }
 
