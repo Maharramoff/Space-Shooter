@@ -7,7 +7,6 @@ const particlesDisposeSpeed = 3;
 const stage = { x: 600, y: 600 };
 const bulletSpeed = 15;
 
-
 // Sounds
 const boomSound = 'sound/boom.mp3';
 const fireSound = 'sound/fire.mp3';
@@ -19,10 +18,6 @@ backgroundImage.src = 'img/space.png';
 // Load the sprite sheet
 const spriteSheet = new Image();
 spriteSheet.src = 'img/sheet.png';
-
-// Mouse Listeners
-document.addEventListener('mousemove', mouseMove, false)
-document.addEventListener('mousedown', mouseClick, false)
 
 // Entities coordinates
 const ship = { sx: 0, sy: 942, sw: 112, sh: 74, h: 40, w: 60 };
@@ -61,6 +56,11 @@ window.addEventListener('keydown', function (event)
         {
             ship.x = stage.x / 2 - ship.w / 2;
             ship.y = stage.y - ship.h - 10;
+
+            // Mouse Listeners
+            canvas.addEventListener('mousemove', mouseMove, false)
+            canvas.addEventListener('mousedown', mouseLeftClick, false)
+
             game();
         }
     }
@@ -178,7 +178,7 @@ function update()
     {
 
         // Əgər hissənin listi boş deyilsə
-        if (particleList[p].filter(function(value) { return value !== undefined }).length)
+        if (particleList[p].filter(function (value) { return value !== undefined }).length)
         {
             for (let j in particleList[p])
             {
@@ -189,7 +189,7 @@ function update()
                     particleList[p][j].y += particleList[p][j].dy;
                     particleList[p][j].lt -= particlesDisposeSpeed;
 
-                    if(particleList[p][j].lt % 10 <= 1)
+                    if (particleList[p][j].lt % 10 <= 1)
                     {
                         particleList[p][j].al -= 0.1;
                     }
@@ -297,18 +297,37 @@ function mouseMove(event)
     ship.y = event.offsetY - ship.h / 2;
 }
 
-function mouseClick(event)
+function mouseLeftClick(evt)
 {
-    bulletList.push(
-      {
-          x : ship.x + ship.w / 2 - bullet.w / 2,
-          y : ship.y - ship.h / 2 - bullet.h / 2,
-          dx: 0,
-          dy: bulletSpeed,
-      });
+    let flag = false;
 
-    // Fire sound
-    new Audio(fireSound).play().then(() => {});
+    evt = evt || window.event;
+
+    if ('buttons' in evt)
+    {
+        flag = evt.buttons === 1;
+    }
+
+    if(!flag)
+    {
+        let button = evt.which || evt.button;
+
+        flag = button === 1;
+    }
+
+    if (flag)
+    {
+        bulletList.push(
+          {
+              x : ship.x + ship.w / 2 - bullet.w / 2,
+              y : ship.y - ship.h / 2 - bullet.h / 2,
+              dx: 0,
+              dy: bulletSpeed,
+          });
+
+        // Fire sound
+        new Audio(fireSound).play().then(() => {});
+    }
 }
 
 function getRandomInt(min, max)
