@@ -27,11 +27,14 @@ const bulletExplosion = [
     { sx: 581, sy: 661, sw: 46, sh: 46, h: 46, w: 46 },
 ];
 const particle = [
-    { sx: 283, sy: 453, sw: 44, sh: 39, h: 44, w: 39 },
+    //{ sx: 283, sy: 453, sw: 44, sh: 39, h: 44, w: 39 },
     { sx: 396, sy: 414, sw: 29, sh: 25, h: 29, w: 25 },
     { sx: 602, sy: 646, sw: 15, sh: 15, h: 15, w: 15 },
     { sx: 365, sy: 814, sw: 16, sh: 18, h: 16, w: 18 },
     { sx: 407, sy: 263, sw: 26, sh: 25, h: 26, w: 25 },
+    { sx: 396, sy: 414, sw: 29, sh: 25, h: 29, w: 25 },
+    { sx: 602, sy: 646, sw: 15, sh: 15, h: 15, w: 15 },
+    { sx: 365, sy: 814, sw: 16, sh: 18, h: 16, w: 18 },
 ];
 const asteroids = [
     { sx: 0, sy: 618, sw: 119, sh: 97, h: 45, w: 55 },
@@ -105,7 +108,9 @@ function update()
                   &&
                   bulletList[b].x < asteroidList[i].x + asteroidList[i].w
                   &&
-                  bulletList[b].y < asteroidList[i].y + asteroidList[i].h - (bullet.h % 10)
+                  bulletList[b].y < asteroidList[i].y + asteroidList[i].h
+                  &&
+                  bulletList[b].y > asteroidList[i].y
                 )
                 {
                     // Bullet explosion
@@ -120,8 +125,8 @@ function update()
                           {
                               x : bulletList[b].x,
                               y : bulletList[b].y,
-                              dx: (particle[p].w / 20) * Math.cos((p * 360 / particleLength) * (Math.PI / 180)),
-                              dy: (particle[p].w / 20) * Math.sin((p * 360 / particleLength) * (Math.PI / 180)),
+                              dx: (particle[p].w / 10) * Math.cos((p * 360 / particleLength) * (Math.PI / 180)),
+                              dy: (particle[p].w / 10) * Math.sin((p * 360 / particleLength) * (Math.PI / 180)),
                               lt: particlesLiveTime,
                               al: alpha,
                           }
