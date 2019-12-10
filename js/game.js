@@ -7,6 +7,11 @@ const particlesDisposeSpeed = 3;
 const stage = { x: 600, y: 600 };
 const bulletSpeed = 15;
 
+
+// Sounds
+const boomSound = 'sound/boom.mp3';
+const fireSound = 'sound/fire.mp3';
+
 // Background image
 const backgroundImage = new Image();
 backgroundImage.src = 'img/space.png';
@@ -42,12 +47,25 @@ const asteroids = [
     { sx: 224, sy: 748, sw: 100, sh: 84, h: 46, w: 55 },
 ];
 
-window.onload = function ()
+// Game start
+window.addEventListener('keydown', function (event)
 {
-    ship.x = stage.x / 2 - ship.w / 2;
-    ship.y = stage.y - ship.h - 10;
-    game();
-}
+    if (event.defaultPrevented)
+    {
+        return;
+    }
+
+    if (event.key !== undefined)
+    {
+        if (event.key === 'Enter')
+        {
+            ship.x = stage.x / 2 - ship.w / 2;
+            ship.y = stage.y - ship.h - 10;
+            game();
+        }
+    }
+
+}, true);
 
 function game()
 {
@@ -138,6 +156,9 @@ function update()
                     // Remove collided elements
                     bulletList.splice(b, 1);
                     asteroidList.splice(i, 1);
+
+                    // Boom sound
+                    new Audio(boomSound).play().then(() => {});
                 }
             }
         }
@@ -285,6 +306,9 @@ function mouseClick(event)
           dx: 0,
           dy: bulletSpeed,
       });
+
+    // Fire sound
+    new Audio(fireSound).play().then(() => {});
 }
 
 function getRandomInt(min, max)
