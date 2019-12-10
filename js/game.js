@@ -2,6 +2,7 @@ const canvas = document.getElementById('game');
 const context = canvas.getContext('2d');
 const spawnFrame = 30;
 const bulletExplosionFrame = 5;
+const particlesLiveTime = 100;
 const stage = { x: 600, y: 600 };
 const bulletSpeed = 15;
 
@@ -56,11 +57,13 @@ let bulletList = [];
 let bulletExplosionList = [];
 let particleList = [];
 let timer = 0;
+let particlesDisposeFrames = 0;
 let particleLength = particle.length;
 
 function update()
 {
     timer++;
+    particlesDisposeFrames++;
 
     if (timer % bulletExplosionFrame === 0)
     {
@@ -117,6 +120,7 @@ function update()
                               y : bulletList[b].y,
                               dx: (particle[p].w / 20) * Math.cos((p * 360 / particleLength) * (Math.PI / 180)),
                               dy: (particle[p].w / 20) * Math.sin((p * 360 / particleLength) * (Math.PI / 180)),
+                              lt: particlesLiveTime,
                           }
                         );
                     }
@@ -154,9 +158,15 @@ function update()
                     // Particle physics
                     particleList[p][j].x += particleList[p][j].dx;
                     particleList[p][j].y += particleList[p][j].dy;
+                    particleList[p][j].lt -= 1;
 
                     // Remove the particles that are out of stage.
-                    if (particleList[p][j].x + particle[j].w < 0 || particleList[p][j].x > 600 || particleList[p][j].y > 600 || particleList[p][j].y + particle[j].h < 0) particleList[p][j] = undefined;
+                    if (particleList[p][j].lt <= 0)
+                    {
+                        particleList[p][j] = undefined;
+                    }
+
+                    //if (particleList[p][j].x + particle[j].w < 0 || particleList[p][j].x > 600 || particleList[p][j].y > 600 || particleList[p][j].y + particle[j].h < 0) particleList[p][j] = undefined;
                 }
             }
         }
