@@ -6,6 +6,7 @@ const particlesLiveTime = 100;
 const particlesDisposeSpeed = 3;
 const stage = { x: 600, y: 600 };
 const bulletSpeed = 15;
+const scoreFactpr = 2;
 let gameStarted = false;
 
 // Game will pause when paused == true
@@ -46,6 +47,18 @@ const asteroids = [
     { sx: 224, sy: 748, sw: 100, sh: 84, h: 46, w: 55 },
 ];
 
+
+// Gameplay variables
+let asteroidList = [];
+let bulletList = [];
+let bulletExplosionList = [];
+let particleList = [];
+let timer = 0;
+let particlesDisposeFrames = 0;
+let alpha = 1;
+let particleLength = particle.length;
+let score = 0;
+
 // Game constructor
 function initGame()
 {
@@ -53,6 +66,7 @@ function initGame()
 
     document.getElementById('game-starter').style.display = 'none';
     document.getElementById('game-stats').style.display = '';
+    document.getElementById('game-score').innerText = "" + score;
 
     ship.x = stage.x / 2 - ship.w / 2;
     ship.y = stage.y - ship.h - 10;
@@ -95,16 +109,6 @@ function game()
     draw();
     requestAnimationFrame(game);
 }
-
-// Gameplay variables
-let asteroidList = [];
-let bulletList = [];
-let bulletExplosionList = [];
-let particleList = [];
-let timer = 0;
-let particlesDisposeFrames = 0;
-let alpha = 1;
-let particleLength = particle.length;
 
 function update()
 {
@@ -182,6 +186,9 @@ function update()
 
                     // Boom sound
                     new Audio(boomSound).play().then(() => {});
+
+                    // Update score
+                    scoreUpdate();
                 }
             }
         }
@@ -240,14 +247,6 @@ function draw()
     // Draw background
     context.drawImage(backgroundImage, 0, 0, 600, 600);
 
-    // Draw Ship
-    context.drawImage(spriteSheet,
-      ship.sx, ship.sy,
-      ship.sw, ship.sh,
-      ship.x,
-      ship.y,
-      ship.w, ship.h);
-
     // Draw bullet explosions
     for (let e in bulletExplosionList)
     {
@@ -300,6 +299,14 @@ function draw()
           asteroidList[i].w, asteroidList[i].h //The destination height and width
         );
     }
+
+    // Draw Ship
+    context.drawImage(spriteSheet,
+      ship.sx, ship.sy,
+      ship.sw, ship.sh,
+      ship.x,
+      ship.y,
+      ship.w, ship.h);
 
     for (let b in bulletList)
     {
@@ -358,6 +365,12 @@ function mouseLeftClick(evt)
         resumeGame();
     }
 
+}
+
+function scoreUpdate()
+{
+    score += scoreFactpr;
+    document.getElementById('game-score').innerText = "" + score;
 }
 
 function getRandomInt(min, max)
