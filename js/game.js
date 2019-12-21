@@ -6,7 +6,7 @@ const particlesLiveTime = 100;
 const particlesDisposeSpeed = 3;
 const stage = { x: 600, y: 600 };
 const bulletSpeed = 15;
-const scoreFactpr = 2;
+const scoreFactor = 2;
 let gameStarted = false;
 
 // Game will pause when paused == true
@@ -18,6 +18,7 @@ const fireSound = 'sound/fire.mp3';
 
 // Background image
 const backgroundImage = new Image();
+const bgImageSpeed = 3;
 backgroundImage.src = 'img/space.png';
 
 // Load the sprite sheet
@@ -47,7 +48,6 @@ const asteroids = [
     { sx: 224, sy: 748, sw: 100, sh: 84, h: 46, w: 55 },
 ];
 
-
 // Gameplay variables
 let asteroidList = [];
 let bulletList = [];
@@ -58,6 +58,7 @@ let particlesDisposeFrames = 0;
 let alpha = 1;
 let particleLength = particle.length;
 let score = 0;
+let bgImageY = 0;
 
 // Game constructor
 function initGame()
@@ -66,7 +67,7 @@ function initGame()
 
     document.getElementById('game-starter').style.display = 'none';
     document.getElementById('game-stats').style.display = '';
-    document.getElementById('game-score').innerText = "" + score;
+    document.getElementById('game-score').innerText = '' + score;
 
     ship.x = stage.x / 2 - ship.w / 2;
     ship.y = stage.y - ship.h - 10;
@@ -125,8 +126,8 @@ function update()
         let genObject = {
             x : Math.random() * 600,
             y : -50,
-            dx: Math.random() * 2 - 1,
-            dy: Math.random() * 2 + 2,
+            dx: getRandomInt(-1, 1),
+            dy: getRandomInt(4, 6),
         };
 
         let randomAsteroid = asteroids[Math.floor(Math.random() * asteroids.length)];
@@ -245,7 +246,19 @@ function update()
 function draw()
 {
     // Draw background
-    context.drawImage(backgroundImage, 0, 0, 600, 600);
+    context.drawImage(backgroundImage, 0, bgImageY, 600, 600);
+    context.drawImage(backgroundImage, 0, bgImageY - stage.y, 600, 600);
+
+    // Update background height
+    bgImageY += bgImageSpeed;
+
+    // Reseting the images when the first image exits the screen
+    if (bgImageY === stage.y)
+    {
+        bgImageY = 0;
+    }
+
+    //context.drawImage(backgroundImage, 0, 0, 600, 600);
 
     // Draw bullet explosions
     for (let e in bulletExplosionList)
@@ -369,8 +382,8 @@ function mouseLeftClick(evt)
 
 function scoreUpdate()
 {
-    score += scoreFactpr;
-    document.getElementById('game-score').innerText = "" + score;
+    score += scoreFactor;
+    document.getElementById('game-score').innerText = '' + score;
 }
 
 function getRandomInt(min, max)
