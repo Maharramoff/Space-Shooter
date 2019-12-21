@@ -46,24 +46,7 @@ const asteroids = [
     { sx: 224, sy: 748, sw: 100, sh: 84, h: 46, w: 55 },
 ];
 
-// Game start
-window.addEventListener('keydown', function (event)
-{
-    if (event.defaultPrevented)
-    {
-        return;
-    }
-
-    if (event.key !== undefined)
-    {
-        if (event.key === 'Enter' && !gameStarted)
-        {
-            initGame();
-        }
-    }
-
-}, true);
-
+// Game constructor
 function initGame()
 {
     gameStarted = true;
@@ -81,16 +64,19 @@ function initGame()
     game();
 }
 
-function pauseGame()
+function pauseOrResumeGame()
 {
-    gamePaused = true;
-    return false;
+    if(gamePaused)
+    {
+        requestAnimationFrame(game);
+    }
+
+    gamePaused = !gamePaused;
 }
 
 function resumeGame()
 {
-    gamePaused = false;
-    return false;
+    pauseOrResumeGame();
 }
 
 function game()
@@ -105,6 +91,7 @@ function game()
     requestAnimationFrame(game);
 }
 
+// Gameplay variables
 let asteroidList = [];
 let bulletList = [];
 let bulletExplosionList = [];
@@ -359,6 +346,13 @@ function mouseLeftClick(evt)
         // Fire sound
         new Audio(fireSound).play().then(() => {});
     }
+
+    // Continue game animation if game paused
+    if (gamePaused)
+    {
+        resumeGame();
+    }
+
 }
 
 function getRandomInt(min, max)
@@ -384,5 +378,27 @@ if (!window.requestAnimationFrame)
           };
     })();
 }
+
+// Game starts if enter key clicked
+window.addEventListener('keydown', function (event)
+{
+    if (event.defaultPrevented)
+    {
+        return;
+    }
+
+    if (event.key !== undefined)
+    {
+        if (event.key === 'Enter')
+        {
+            // Check if game is not running
+            if (!gameStarted)
+            {
+                initGame();
+            }
+        }
+    }
+
+}, true);
 
 
