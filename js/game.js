@@ -334,10 +334,33 @@ function draw()
     }
 }
 
+let newX, newY;
+
 function mouseMove(event)
 {
-    ship.x = event.offsetX - ship.w / 2;
-    ship.y = event.offsetY - ship.h / 2;
+    newX = event.offsetX - ship.w / 2;
+    newY = event.offsetY - ship.h / 2;
+
+    if(newX <= 0)
+    {
+        newX = 0;
+    }
+    else if (newX + ship.w >= stage.x)
+    {
+        newX = stage.x - ship.w;
+    }
+
+    if(newY + ship.h >= stage.y)
+    {
+        newY = stage.y - ship.h;
+    }
+    else if(newY <= 0)
+    {
+        newY = 0;
+    }
+
+    ship.x = newX;
+    ship.y = newY;
 }
 
 function mouseLeftClick(evt)
