@@ -5,6 +5,8 @@ body {
     background: darkslategrey;
 }
 
+
+/* Game menu */
 fieldset {
     border: solid 4px white;
     color: white;
@@ -45,6 +47,8 @@ fieldset a:hover, fieldset a:focus {
     outline: none;
 }
 
+
+/* Canvas */
 #game-wrapper {
     width: 600px;
     margin: 0 auto;
@@ -54,4 +58,44 @@ canvas {
     cursor: none;
     background-image: url('../img/space.png');
     background-size: 600px 600px;
+}
+
+
+/* Blink */
+.blink {
+    -webkit-animation: blink .75s linear infinite;
+    -moz-animation: blink .75s linear infinite;
+    -ms-animation: blink .75s linear infinite;
+    -o-animation: blink .75s linear infinite;
+    animation: blink .75s linear infinite;
+}
+@-webkit-keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 1; }
+    50.01% { opacity: 0; }
+    100% { opacity: 0; }
+}
+@-moz-keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 1; }
+    50.01% { opacity: 0; }
+    100% { opacity: 0; }
+}
+@-ms-keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 1; }
+    50.01% { opacity: 0; }
+    100% { opacity: 0; }
+}
+@-o-keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 1; }
+    50.01% { opacity: 0; }
+    100% { opacity: 0; }
+}
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 1; }
+    50.01% { opacity: 0; }
+    100% { opacity: 0; }
 }

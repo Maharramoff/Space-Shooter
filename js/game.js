@@ -66,9 +66,14 @@ function initGame()
 
 function pauseOrResumeGame()
 {
-    if(gamePaused)
+    if (gamePaused)
     {
+        document.getElementById('game-paused').classList.remove('blink');
         requestAnimationFrame(game);
+    }
+    else
+    {
+        document.getElementById('game-paused').classList.add('blink');
     }
 
     gamePaused = !gamePaused;
