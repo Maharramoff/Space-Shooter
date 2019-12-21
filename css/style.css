@@ -9,7 +9,7 @@ fieldset {
     border: solid 4px white;
     color: white;
     width: 300px;
-    padding-bottom: 0;
+    /*padding-bottom: 0;*/
     margin: 0 auto;
 }
 
@@ -22,6 +22,9 @@ fieldset ul {
     padding: 10px 20px;
     margin: 0;
     overflow: auto;
+/*    position: absolute;
+    top: 525px;
+    bottom: 0;*/
 }
 
 fieldset li {

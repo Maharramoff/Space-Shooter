@@ -7,6 +7,9 @@ const particlesDisposeSpeed = 3;
 const stage = { x: 600, y: 600 };
 const bulletSpeed = 15;
 
+// Game will pause when paused == true
+let gamePaused = false;
+
 // Sounds
 const boomSound = 'sound/boom.mp3';
 const fireSound = 'sound/fire.mp3';
@@ -62,9 +65,8 @@ window.addEventListener('keydown', function (event)
 
 function initGame()
 {
-    document.getElementById("game-starter").style.display = "none";
-    document.getElementById("game-stats").style.display = "";
-
+    document.getElementById('game-starter').style.display = 'none';
+    document.getElementById('game-stats').style.display = '';
 
     ship.x = stage.x / 2 - ship.w / 2;
     ship.y = stage.y - ship.h - 10;
@@ -76,8 +78,19 @@ function initGame()
     game();
 }
 
+function pauseGame()
+{
+    gamePaused = true;
+    return false;
+}
+
 function game()
 {
+    if (gamePaused)
+    {
+        return;
+    }
+
     update();
     draw();
     requestAnimationFrame(game);
@@ -317,7 +330,7 @@ function mouseLeftClick(evt)
         flag = evt.buttons === 1;
     }
 
-    if(!flag)
+    if (!flag)
     {
         let button = evt.which || evt.button;
 
