@@ -6,6 +6,7 @@ const particlesLiveTime = 100;
 const particlesDisposeSpeed = 3;
 const stage = { x: 600, y: 600 };
 const bulletSpeed = 15;
+let gameStarted = false;
 
 // Game will pause when paused == true
 let gamePaused = false;
@@ -55,7 +56,7 @@ window.addEventListener('keydown', function (event)
 
     if (event.key !== undefined)
     {
-        if (event.key === 'Enter')
+        if (event.key === 'Enter' && !gameStarted)
         {
             initGame();
         }
@@ -65,6 +66,8 @@ window.addEventListener('keydown', function (event)
 
 function initGame()
 {
+    gameStarted = true;
+
     document.getElementById('game-starter').style.display = 'none';
     document.getElementById('game-stats').style.display = '';
 
@@ -81,6 +84,12 @@ function initGame()
 function pauseGame()
 {
     gamePaused = true;
+    return false;
+}
+
+function resumeGame()
+{
+    gamePaused = false;
     return false;
 }
 
