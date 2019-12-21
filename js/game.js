@@ -54,18 +54,24 @@ window.addEventListener('keydown', function (event)
     {
         if (event.key === 'Enter')
         {
-            ship.x = stage.x / 2 - ship.w / 2;
-            ship.y = stage.y - ship.h - 10;
-
-            // Mouse Listeners
-            canvas.addEventListener('mousemove', mouseMove, false)
-            canvas.addEventListener('mousedown', mouseLeftClick, false)
-
-            game();
+            initGame();
         }
     }
 
 }, true);
+
+function initGame()
+{
+    ship.x = stage.x / 2 - ship.w / 2;
+    ship.y = stage.y - ship.h - 10;
+
+    // Mouse Listeners
+    canvas.addEventListener('mousemove', mouseMove, false)
+    canvas.addEventListener('mousedown', mouseLeftClick, false)
+
+    game();
+}
+
 
 function game()
 {
