@@ -49,4 +49,6 @@ fieldset a:hover, fieldset a:focus {
 
 canvas {
     cursor: none;
+    background-image: url('../img/space.png');
+    background-size: 600px 600px;
 }
