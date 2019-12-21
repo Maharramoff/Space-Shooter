@@ -2,19 +2,28 @@
 <html lang="">
 
 <head>
-  <meta charset="utf-8">
-  <title>Asteroids</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="css/style.css">
+    <meta charset="utf-8">
+    <title>Asteroids</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
 
 <div id="game-wrapper">
-  <canvas id="game" width="600" height="600">Canvas not supported</canvas>
+    <fieldset>
+        <canvas id="game" width="600" height="600">Canvas not supported</canvas>
+        <legend>Space Shooter</legend>
+        <ul id="game-starter">
+            <li><a href="javascript:void(0)" onclick="initGame()">Start Game!</a></li>
+            <li>Options (coming soon)</li>
+        </ul>
+        <ul id="game-stats" style="display: none">
+        </ul>
+    </fieldset>
 </div>
 
-  <script src="js/game.js"></script>
+<script src="js/game.js"></script>
 
 </body>
 

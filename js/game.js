@@ -62,6 +62,10 @@ window.addEventListener('keydown', function (event)
 
 function initGame()
 {
+    document.getElementById("game-starter").style.display = "none";
+    document.getElementById("game-stats").style.display = "";
+
+
     ship.x = stage.x / 2 - ship.w / 2;
     ship.y = stage.y - ship.h - 10;
 
@@ -71,7 +75,6 @@ function initGame()
 
     game();
 }
-
 
 function game()
 {
