@@ -6,7 +6,7 @@ const particlesLiveTime = 100;
 const particlesDisposeSpeed = 3;
 const bulletSpeed = 15;
 const scoreFactor = 2;
-const STAGE = {x: 600, y: 600};
+const STAGE = { x: 600, y: 600 };
 let gameStarted = false;
 
 // Game will pause when paused == true
@@ -26,7 +26,7 @@ const SPRITE_SHEET = new Image();
 SPRITE_SHEET.src = 'img/sheet.png';
 
 // Entities coordinates
-const ship = { sx: 0, sy: 942, sw: 112, sh: 74, h: 40, w: 60 };
+const SHIP_SPRITE = { sx: 0, sy: 942, sw: 112, sh: 74, h: 40, w: 60 };
 const BULLET_SPRITE = { sx: 856, sy: 602, sw: 9, sh: 37, h: 37, w: 9 };
 const bulletExplosion = [
     { sx: 603, sy: 600, sw: 46, sh: 46, h: 46, w: 46 },
@@ -49,7 +49,143 @@ const ASTEROID_SPRITES = [
     { sx: 224, sy: 748, sw: 100, sh: 84, h: 46, w: 55 },
 ];
 
+class Asteroid
+{
+    constructor(x, y, dx, dy, spriteIndex)
+    {
+        let randomAsteroid = ASTEROID_SPRITES[spriteIndex];
+
+        this.y = y;
+        this.x = x;
+        this.dx = dx;
+        this.dy = dy;
+        this.sx = randomAsteroid.sx;
+        this.sy = randomAsteroid.sy;
+        this.sw = randomAsteroid.sw;
+        this.sh = randomAsteroid.sh;
+        this.h = randomAsteroid.h;
+        this.w = randomAsteroid.w;
+    }
+
+    update()
+    {
+        this.x += this.dx;
+        this.y += this.dy;
+    }
+
+    draw()
+    {
+        context.drawImage(
+          SPRITE_SHEET, //The image file
+          this.sx, this.sy, //The source x and y position
+          this.sw, this.sh, //The source width and height
+          this.x, this.y, //The destination x and y position
+          this.w, this.h //The destination height and width
+        );
+    }
+
+    outOfBounds()
+    {
+        return this.x + this.w < 0 || this.x > STAGE.x || this.y > STAGE.y;
+    }
+}
+
+class Bullet
+{
+    constructor(x, y, dx, dy)
+    {
+        this.y = y;
+        this.x = x;
+        this.dx = dx;
+        this.dy = dy;
+    }
+
+    update()
+    {
+        this.x += this.dx;
+        this.y -= this.dy;
+    }
+
+    draw()
+    {
+        context.drawImage(
+          SPRITE_SHEET,
+          BULLET_SPRITE.sx, BULLET_SPRITE.sy,
+          BULLET_SPRITE.sw, BULLET_SPRITE.sh,
+          this.x, this.y,
+          BULLET_SPRITE.w, BULLET_SPRITE.h
+        );
+    }
+
+    outOfBounds()
+    {
+        return this.x + BULLET_SPRITE.w < 0 || this.x > STAGE.x || this.y < 0;
+    }
+}
+
+class Ship
+{
+    newX;
+    newY;
+
+    constructor(x, y, dx, dy)
+    {
+        this.y = y;
+        this.x = x;
+        this.dx = dx;
+        this.dy = dy;
+        let self = this;
+        canvas.addEventListener('mousemove', function(event){
+            self.move(event);
+        });
+    }
+
+    update()
+    {
+        this.x += this.dx;
+        this.y += this.dy;
+    }
+
+    draw()
+    {
+        context.drawImage(SPRITE_SHEET,
+          SHIP_SPRITE.sx, SHIP_SPRITE.sy,
+          SHIP_SPRITE.sw, SHIP_SPRITE.sh,
+          this.x,
+          this.y,
+          SHIP_SPRITE.w, SHIP_SPRITE.h);
+    }
+
+    move(event)
+    {
+        this.newX = event.offsetX - SHIP_SPRITE.w / 2;
+        this.newY = event.offsetY - SHIP_SPRITE.h / 2;
+
+        if (this.newX <= 0)
+        {
+            this.newX = 0;
+        }
+        else if (this.newX + SHIP_SPRITE.w >= STAGE.x)
+        {
+            this.newX = STAGE.x - SHIP_SPRITE.w;
+        }
+
+        if (this.newY + SHIP_SPRITE.h >= STAGE.y)
+        {
+            this.newY = STAGE.y - SHIP_SPRITE.h;
+        }
+        else if (this.newY <= 0)
+        {
+            this.newY = 0;
+        }
+
+        this.x = this.newX;
+        this.y = this.newY;
+    }
+}
+
 // Gameplay variables
+let ship = new Ship(STAGE.x / 2 - SHIP_SPRITE.w / 2, STAGE.y - SHIP_SPRITE.h - 10);
 let asteroidList = [];
 let bulletList = [];
 let bulletExplosionList = [];
@@ -71,11 +207,7 @@ function initGame()
     document.getElementById('game-stats').style.display = '';
     document.getElementById('game-score').innerText = '' + score;
 
-    ship.x = STAGE.x / 2 - ship.w / 2;
-    ship.y = STAGE.y - ship.h - 10;
-
     // Mouse Listeners
-    canvas.addEventListener('mousemove', mouseMove, false)
     canvas.addEventListener('mousedown', mouseLeftClick, false)
 
     game();
@@ -136,7 +268,7 @@ function update()
         asteroidList[i].update();
 
         // Remove the asteroids that are out of stage.
-        if(asteroidList[i].outOfBounds())
+        if (asteroidList[i].outOfBounds())
         {
             asteroidList.splice(i, 1);
         }
@@ -304,12 +436,7 @@ function draw()
     }
 
     // Draw Ship
-    context.drawImage(SPRITE_SHEET,
-      ship.sx, ship.sy,
-      ship.sw, ship.sh,
-      ship.x,
-      ship.y,
-      ship.w, ship.h);
+    ship.draw();
 
     for (let b in bulletList)
     {
@@ -322,21 +449,21 @@ let newX, newY;
 
 function mouseMove(event)
 {
-    newX = event.offsetX - ship.w / 2;
-    newY = event.offsetY - ship.h / 2;
+    newX = event.offsetX - SHIP_SPRITE.w / 2;
+    newY = event.offsetY - SHIP_SPRITE.h / 2;
 
     if (newX <= 0)
     {
         newX = 0;
     }
-    else if (newX + ship.w >= STAGE.x)
+    else if (newX + SHIP_SPRITE.w >= STAGE.x)
     {
-        newX = STAGE.x - ship.w;
+        newX = STAGE.x - SHIP_SPRITE.w;
     }
 
-    if (newY + ship.h >= STAGE.y)
+    if (newY + SHIP_SPRITE.h >= STAGE.y)
     {
-        newY = STAGE.y - ship.h;
+        newY = STAGE.y - SHIP_SPRITE.h;
     }
     else if (newY <= 0)
     {
@@ -368,7 +495,7 @@ function mouseLeftClick(evt)
     if (flag)
     {
         // Generate bullet
-        bulletList.push(new Bullet(ship.x + ship.w / 2 - BULLET_SPRITE.w / 2, ship.y - ship.h / 2 - BULLET_SPRITE.h / 2, 0, bulletSpeed));
+        bulletList.push(new Bullet(ship.x + SHIP_SPRITE.w / 2 - BULLET_SPRITE.w / 2, ship.y - SHIP_SPRITE.h / 2 - BULLET_SPRITE.h / 2, 0, bulletSpeed));
 
         // Fire sound
         new Audio(fireSound).play().then(() => {});
@@ -434,76 +561,3 @@ window.addEventListener('keydown', function (event)
 
 }, true);
 
-class Asteroid
-{
-    constructor(x, y, dx, dy, spriteIndex)
-    {
-        let randomAsteroid = ASTEROID_SPRITES[spriteIndex];
-
-        this.y = y;
-        this.x = x;
-        this.dx = dx;
-        this.dy = dy;
-        this.sx = randomAsteroid.sx;
-        this.sy = randomAsteroid.sy;
-        this.sw = randomAsteroid.sw;
-        this.sh = randomAsteroid.sh;
-        this.h = randomAsteroid.h;
-        this.w = randomAsteroid.w;
-    }
-
-    update()
-    {
-        this.x += this.dx;
-        this.y += this.dy;
-    }
-
-    draw()
-    {
-        context.drawImage(
-          SPRITE_SHEET, //The image file
-          this.sx, this.sy, //The source x and y position
-          this.sw, this.sh, //The source width and height
-          this.x, this.y, //The destination x and y position
-          this.w, this.h //The destination height and width
-        );
-    }
-
-    outOfBounds()
-    {
-        return this.x + this.w < 0 || this.x > STAGE.x || this.y > STAGE.y;
-    }
-}
-
-class Bullet
-{
-    constructor(x, y, dx, dy)
-    {
-        this.y = y;
-        this.x = x;
-        this.dx = dx;
-        this.dy = dy;
-    }
-
-    update()
-    {
-        this.x += this.dx;
-        this.y -= this.dy;
-    }
-
-    draw()
-    {
-        context.drawImage(
-          SPRITE_SHEET,
-          BULLET_SPRITE.sx, BULLET_SPRITE.sy,
-          BULLET_SPRITE.sw, BULLET_SPRITE.sh,
-          this.x, this.y,
-          BULLET_SPRITE.w, BULLET_SPRITE.h
-        );
-    }
-
-    outOfBounds()
-    {
-        return this.x + BULLET_SPRITE.w < 0 || this.x > STAGE.x || this.y < 0;
-    }
-}
