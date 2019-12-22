@@ -22,12 +22,12 @@ const bgImageSpeed = 3;
 backgroundImage.src = 'img/space.png';
 
 // Load the sprite sheet
-const spriteSheet = new Image();
-spriteSheet.src = 'img/sheet.png';
+const SPRITE_SHEET = new Image();
+SPRITE_SHEET.src = 'img/sheet.png';
 
 // Entities coordinates
 const ship = { sx: 0, sy: 942, sw: 112, sh: 74, h: 40, w: 60 };
-const bullet = { sx: 856, sy: 602, sw: 9, sh: 37, h: 37, w: 9 };
+const BULLET_SPRITE = { sx: 856, sy: 602, sw: 9, sh: 37, h: 37, w: 9 };
 const bulletExplosion = [
     { sx: 603, sy: 600, sw: 46, sh: 46, h: 46, w: 46 },
     { sx: 581, sy: 661, sw: 46, sh: 46, h: 46, w: 46 },
@@ -195,11 +195,10 @@ function update()
     for (let b in bulletList)
     {
         // Bullet physics
-        bulletList[b].x += bulletList[b].dx;
-        bulletList[b].y -= bulletList[b].dy;
+        bulletList[b].update();
 
         // Remove the bullets that are out of stage.
-        if (bulletList[b].x + bulletList[b].w < 0 || bulletList[b].x > 600 || bulletList[b].y < 0) bulletList.splice(b, 1);
+        if (bulletList[b].outOfBounds()) bulletList.splice(b, 1);
     }
 
     for (let p in particleList)
@@ -261,7 +260,7 @@ function draw()
     for (let e in bulletExplosionList)
     {
         context.drawImage(
-          spriteSheet,
+          SPRITE_SHEET,
           bulletExplosion[0].sx, bulletExplosion[0].sy,
           bulletExplosion[0].sw, bulletExplosion[0].sh,
           bulletExplosionList[e].x - bulletExplosion[0].w / 2, bulletExplosionList[e].y - bulletExplosion[0].h / 2,
@@ -269,7 +268,7 @@ function draw()
         );
 
         context.drawImage(
-          spriteSheet,
+          SPRITE_SHEET,
           bulletExplosion[1].sx, bulletExplosion[1].sy,
           bulletExplosion[1].sw, bulletExplosion[1].sh,
           bulletExplosionList[e].x - bulletExplosion[1].w / 2, bulletExplosionList[e].y - bulletExplosion[1].h / 2,
@@ -287,7 +286,7 @@ function draw()
                 context.save();
                 context.globalAlpha = particleList[p][j].al;
                 context.drawImage(
-                  spriteSheet,
+                  SPRITE_SHEET,
                   particle[j].sx, particle[j].sy,
                   particle[j].sw, particle[j].sh,
                   particleList[p][j].x, particleList[p][j].y,
@@ -305,7 +304,7 @@ function draw()
     }
 
     // Draw Ship
-    context.drawImage(spriteSheet,
+    context.drawImage(SPRITE_SHEET,
       ship.sx, ship.sy,
       ship.sw, ship.sh,
       ship.x,
@@ -315,13 +314,7 @@ function draw()
     for (let b in bulletList)
     {
         // Draw bullets
-        context.drawImage(
-          spriteSheet,
-          bullet.sx, bullet.sy,
-          bullet.sw, bullet.sh,
-          bulletList[b].x, bulletList[b].y,
-          bullet.w, bullet.h
-        );
+        bulletList[b].draw();
     }
 }
 
@@ -374,13 +367,8 @@ function mouseLeftClick(evt)
 
     if (flag)
     {
-        bulletList.push(
-          {
-              x : ship.x + ship.w / 2 - bullet.w / 2,
-              y : ship.y - ship.h / 2 - bullet.h / 2,
-              dx: 0,
-              dy: bulletSpeed,
-          });
+        // Generate bullet
+        bulletList.push(new Bullet(ship.x + ship.w / 2 - BULLET_SPRITE.w / 2, ship.y - ship.h / 2 - BULLET_SPRITE.h / 2, 0, bulletSpeed));
 
         // Fire sound
         new Audio(fireSound).play().then(() => {});
@@ -473,7 +461,7 @@ class Asteroid
     draw()
     {
         context.drawImage(
-          spriteSheet, //The image file
+          SPRITE_SHEET, //The image file
           this.sx, this.sy, //The source x and y position
           this.sw, this.sh, //The source width and height
           this.x, this.y, //The destination x and y position
@@ -484,5 +472,38 @@ class Asteroid
     outOfBounds()
     {
         return this.x + this.w < 0 || this.x > STAGE.x || this.y > STAGE.y;
+    }
+}
+
+class Bullet
+{
+    constructor(x, y, dx, dy)
+    {
+        this.y = y;
+        this.x = x;
+        this.dx = dx;
+        this.dy = dy;
+    }
+
+    update()
+    {
+        this.x += this.dx;
+        this.y -= this.dy;
+    }
+
+    draw()
+    {
+        context.drawImage(
+          SPRITE_SHEET,
+          BULLET_SPRITE.sx, BULLET_SPRITE.sy,
+          BULLET_SPRITE.sw, BULLET_SPRITE.sh,
+          this.x, this.y,
+          BULLET_SPRITE.w, BULLET_SPRITE.h
+        );
+    }
+
+    outOfBounds()
+    {
+        return this.x + BULLET_SPRITE.w < 0 || this.x > STAGE.x || this.y < 0;
     }
 }
