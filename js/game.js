@@ -32,8 +32,7 @@ const bulletExplosion = [
     { sx: 603, sy: 600, sw: 46, sh: 46, h: 46, w: 46 },
     { sx: 581, sy: 661, sw: 46, sh: 46, h: 46, w: 46 },
 ];
-const particle = [
-    //{ sx: 283, sy: 453, sw: 44, sh: 39, h: 44, w: 39 },
+const PARTICLE_SPRITE = [
     { sx: 396, sy: 414, sw: 29, sh: 25, h: 29, w: 25 },
     { sx: 602, sy: 646, sw: 15, sh: 15, h: 15, w: 15 },
     { sx: 365, sy: 814, sw: 16, sh: 18, h: 16, w: 18 },
@@ -148,7 +147,8 @@ class Ship
         this.dx = dx;
         this.dy = dy;
         let self = this;
-        canvas.addEventListener('mousemove', function(event){
+        canvas.addEventListener('mousemove', function (event)
+        {
             self.move(event);
         });
     }
@@ -197,6 +197,54 @@ class Ship
     }
 }
 
+class Particle
+{
+    constructor(x, y, dx, dy, livetime, alpha, particleindex)
+    {
+        this.y = y;
+        this.x = x;
+        this.dx = dx;
+        this.dy = dy;
+        this.lt = livetime;
+        this.al = alpha;
+        this.index = particleindex;
+    }
+
+    update()
+    {
+        this.x += this.dx;
+        this.y += this.dy;
+
+        // Decrease particle live time by dispose speed
+        this.lt -= particlesDisposeSpeed;
+
+        // Decrease particle opacity
+        if (this.lt % 10 <= 1)
+        {
+            this.al -= 0.1;
+        }
+    }
+
+    liveTimeEnded()
+    {
+        return this.lt <= 0;
+    }
+
+    draw()
+    {
+        context.save();
+        context.globalAlpha = this.al;
+        context.drawImage(
+          SPRITE_SHEET,
+          PARTICLE_SPRITE[this.index].sx, PARTICLE_SPRITE[this.index].sy,
+          PARTICLE_SPRITE[this.index].sw, PARTICLE_SPRITE[this.index].sh,
+          this.x, this.y,
+          PARTICLE_SPRITE[this.index].w, PARTICLE_SPRITE[this.index].h
+        );
+        context.restore();
+    }
+}
+
 // Gameplay variables
 let ship = new Ship(STAGE.x / 2 - SHIP_SPRITE.w / 2, STAGE.y - SHIP_SPRITE.h - 10);
 let asteroidList = [];
@@ -206,7 +254,7 @@ let particleList = [];
 let timer = 0;
 let particlesDisposeFrames = 0;
 let alpha = 1;
-let particleLength = particle.length;
+let particleLength = PARTICLE_SPRITE.length;
 let score = 0;
 let bgImageY = 0;
 let randomAsteroidIndex;
@@ -291,7 +339,7 @@ function update()
         {
             if (asteroidList.hasOwnProperty(i) && bulletList.hasOwnProperty(b))
             {
-                if(bulletList[b].hit(asteroidList[i]))
+                if (bulletList[b].hit(asteroidList[i]))
                 {
                     // Bullet explosion
                     bulletExplosionList.push({ x: bulletList[b].x, y: bulletList[b].y });
@@ -301,15 +349,14 @@ function update()
 
                     for (let p = 0; p < particleLength; p++)
                     {
-                        particleObjects.push(
-                          {
-                              x : bulletList[b].x,
-                              y : bulletList[b].y,
-                              dx: (particle[p].w / 10) * Math.cos((p * 360 / particleLength) * (Math.PI / 180)),
-                              dy: (particle[p].w / 10) * Math.sin((p * 360 / particleLength) * (Math.PI / 180)),
-                              lt: particlesLiveTime,
-                              al: alpha,
-                          }
+                        particleObjects.push(new Particle(
+                          bulletList[b].x,
+                          bulletList[b].y,
+                          (PARTICLE_SPRITE[p].w / 10) * Math.cos((p * 360 / particleLength) * (Math.PI / 180)),
+                          (PARTICLE_SPRITE[p].w / 10) * Math.sin((p * 360 / particleLength) * (Math.PI / 180)),
+                          particlesLiveTime,
+                          alpha,
+                          p)
                         );
                     }
 
@@ -340,32 +387,21 @@ function update()
 
     for (let p in particleList)
     {
-
-        // Əgər hissənin listi boş deyilsə
-        if (particleList[p].filter(function (value) { return value !== undefined }).length)
+        // If any defined value in current particle index
+        if (countDefinedValues(particleList[p]))
         {
             for (let j in particleList[p])
             {
                 if (particleList[p][j] !== undefined)
                 {
                     // Particle physics
-                    particleList[p][j].x += particleList[p][j].dx;
-                    particleList[p][j].y += particleList[p][j].dy;
-                    particleList[p][j].lt -= particlesDisposeSpeed;
-
-                    if (particleList[p][j].lt % 10 <= 1)
-                    {
-                        particleList[p][j].al -= 0.1;
-                    }
+                    particleList[p][j].update();
 
                     // Remove the particles if live time ended
-                    if (particleList[p][j].lt <= 0)
+                    if(particleList[p][j].liveTimeEnded())
                     {
                         particleList[p][j] = undefined;
                     }
-
-                    // Remove the particles that are out of stage.
-                    //if (particleList[p][j].x + particle[j].w < 0 || particleList[p][j].x > 600 || particleList[p][j].y > 600 || particleList[p][j].y + particle[j].h < 0) particleList[p][j] = undefined;
                 }
             }
         }
@@ -374,6 +410,14 @@ function update()
             particleList.splice(p, 1);
         }
     }
+}
+
+function countDefinedValues(array)
+{
+    return array.filter(function (value)
+    {
+        return value !== undefined
+    }).length;
 }
 
 function draw()
@@ -390,8 +434,6 @@ function draw()
     {
         bgImageY = 0;
     }
-
-    //context.drawImage(backgroundImage, 0, 0, 600, 600);
 
     // Draw bullet explosions
     for (let e in bulletExplosionList)
@@ -420,21 +462,12 @@ function draw()
         {
             if (particleList[p][j] !== undefined)
             {
-                context.save();
-                context.globalAlpha = particleList[p][j].al;
-                context.drawImage(
-                  SPRITE_SHEET,
-                  particle[j].sx, particle[j].sy,
-                  particle[j].sw, particle[j].sh,
-                  particleList[p][j].x, particleList[p][j].y,
-                  particle[j].w, particle[j].h
-                );
-                context.restore();
+                particleList[p][j].draw();
             }
         }
     }
 
-    // Draw asteroid
+    // Draw asteroids
     for (let i in asteroidList)
     {
         asteroidList[i].draw();
@@ -443,40 +476,11 @@ function draw()
     // Draw Ship
     ship.draw();
 
+    // Draw bullets
     for (let b in bulletList)
     {
-        // Draw bullets
         bulletList[b].draw();
     }
-}
-
-let newX, newY;
-
-function mouseMove(event)
-{
-    newX = event.offsetX - SHIP_SPRITE.w / 2;
-    newY = event.offsetY - SHIP_SPRITE.h / 2;
-
-    if (newX <= 0)
-    {
-        newX = 0;
-    }
-    else if (newX + SHIP_SPRITE.w >= STAGE.x)
-    {
-        newX = STAGE.x - SHIP_SPRITE.w;
-    }
-
-    if (newY + SHIP_SPRITE.h >= STAGE.y)
-    {
-        newY = STAGE.y - SHIP_SPRITE.h;
-    }
-    else if (newY <= 0)
-    {
-        newY = 0;
-    }
-
-    ship.x = newX;
-    ship.y = newY;
 }
 
 function mouseLeftClick(evt)
