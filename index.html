@@ -15,11 +15,11 @@
         <canvas id="game" width="600" height="600">Canvas not supported</canvas>
         <legend>Space Shooter</legend>
         <ul id="game-starter">
-            <li><a href="javascript:void(0)" onclick="initGame()">Start Game!</a></li>
+            <li><a href="javascript:void(0)" onclick="game.start()">Start Game!</a></li>
             <li>Options (coming soon)</li>
         </ul>
         <ul id="game-stats" style="display: none">
-            <li><a href="javascript:void(0)" onclick="pauseOrResumeGame()" id="game-paused">Pause/Resume</a></li>
+            <li><a href="javascript:void(0)" onclick="game.pauseOrResumeGame()" id="game-paused">Pause/Resume</a></li>
             <li>Score: <em id="game-score"></em></li>
         </ul>
     </fieldset>
