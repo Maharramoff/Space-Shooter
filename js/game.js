@@ -248,10 +248,18 @@ class Particle
 
 class Explosion
 {
-    constructor(x, y)
+    constructor(x, y, dx, dy)
     {
         this.y = y;
         this.x = x;
+        this.dx = dx;
+        this.dy = dy;
+    }
+
+    update()
+    {
+        this.x += this.dx;
+        this.y += this.dy;
     }
 
     draw(index)
@@ -363,7 +371,7 @@ function update()
                 if (bulletList[b].hit(asteroidList[i]))
                 {
                     // Bullet explosion
-                    explosionList.push(new Explosion(asteroidList[i].x + asteroidList[i].w / 2, asteroidList[i].y + asteroidList[i].h / 2));
+                    explosionList.push(new Explosion(asteroidList[i].x + asteroidList[i].w / 2, asteroidList[i].y + asteroidList[i].h / 2, asteroidList[i].dx, asteroidList[i].dy));
 
                     // Particles
                     let particleObjects = [];
@@ -395,6 +403,12 @@ function update()
                 }
             }
         }
+    }
+
+    // Explosion physics
+    for (let e in explosionList)
+    {
+        explosionList[e].update();
     }
 
     for (let b in bulletList)
