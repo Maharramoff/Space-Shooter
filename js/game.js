@@ -1,12 +1,13 @@
 const canvas = document.getElementById('game');
 const context = canvas.getContext('2d');
 const spawnFrame = 30;
-const bulletExplosionFrame = 5;
+const bulletExplosionFrame = 60;
 const particlesLiveTime = 100;
 const particlesDisposeSpeed = 3;
 const bulletSpeed = 15;
 const scoreFactor = 2;
 const STAGE = { x: 600, y: 600 };
+const FRAME_RATE = 60;
 let gameStarted = false;
 
 // Game will pause when paused == true
@@ -28,7 +29,7 @@ SPRITE_SHEET.src = 'img/sheet.png';
 // Entities coordinates
 const SHIP_SPRITE = { sx: 0, sy: 942, sw: 112, sh: 74, h: 40, w: 60 };
 const BULLET_SPRITE = { sx: 856, sy: 602, sw: 9, sh: 37, h: 37, w: 9 };
-const bulletExplosion = [
+const EXPLOSION_SPRITE = [
     { sx: 603, sy: 600, sw: 46, sh: 46, h: 46, w: 46 },
     { sx: 581, sy: 661, sw: 46, sh: 46, h: 46, w: 46 },
 ];
@@ -245,11 +246,31 @@ class Particle
     }
 }
 
+class Explosion
+{
+    constructor(x, y)
+    {
+        this.y = y;
+        this.x = x;
+    }
+
+    draw(index)
+    {
+        context.drawImage(
+          SPRITE_SHEET,
+          EXPLOSION_SPRITE[index].sx, EXPLOSION_SPRITE[index].sy,
+          EXPLOSION_SPRITE[index].sw, EXPLOSION_SPRITE[index].sh,
+          this.x - EXPLOSION_SPRITE[index].w / 2, this.y - EXPLOSION_SPRITE[index].h / 2,
+          EXPLOSION_SPRITE[index].w, EXPLOSION_SPRITE[index].h
+        );
+    }
+}
+
 // Gameplay variables
 let ship = new Ship(STAGE.x / 2 - SHIP_SPRITE.w / 2, STAGE.y - SHIP_SPRITE.h - 10);
 let asteroidList = [];
 let bulletList = [];
-let bulletExplosionList = [];
+let explosionList = [];
 let particleList = [];
 let timer = 0;
 let particlesDisposeFrames = 0;
@@ -313,7 +334,7 @@ function update()
 
     if (timer % bulletExplosionFrame === 0)
     {
-        bulletExplosionList = [];
+        explosionList = [];
     }
 
     if (timer % spawnFrame === 0)
@@ -342,7 +363,7 @@ function update()
                 if (bulletList[b].hit(asteroidList[i]))
                 {
                     // Bullet explosion
-                    bulletExplosionList.push({ x: bulletList[b].x, y: bulletList[b].y });
+                    explosionList.push(new Explosion(asteroidList[i].x + asteroidList[i].w / 2, asteroidList[i].y + asteroidList[i].h / 2));
 
                     // Particles
                     let particleObjects = [];
@@ -398,7 +419,7 @@ function update()
                     particleList[p][j].update();
 
                     // Remove the particles if live time ended
-                    if(particleList[p][j].liveTimeEnded())
+                    if (particleList[p][j].liveTimeEnded())
                     {
                         particleList[p][j] = undefined;
                     }
@@ -410,6 +431,8 @@ function update()
             particleList.splice(p, 1);
         }
     }
+
+    if (timer > FRAME_RATE) timer = 0;
 }
 
 function countDefinedValues(array)
@@ -435,24 +458,11 @@ function draw()
         bgImageY = 0;
     }
 
-    // Draw bullet explosions
-    for (let e in bulletExplosionList)
+    // Draw explosions
+    for (let e in explosionList)
     {
-        context.drawImage(
-          SPRITE_SHEET,
-          bulletExplosion[0].sx, bulletExplosion[0].sy,
-          bulletExplosion[0].sw, bulletExplosion[0].sh,
-          bulletExplosionList[e].x - bulletExplosion[0].w / 2, bulletExplosionList[e].y - bulletExplosion[0].h / 2,
-          bulletExplosion[0].w, bulletExplosion[0].h
-        );
-
-        context.drawImage(
-          SPRITE_SHEET,
-          bulletExplosion[1].sx, bulletExplosion[1].sy,
-          bulletExplosion[1].sw, bulletExplosion[1].sh,
-          bulletExplosionList[e].x - bulletExplosion[1].w / 2, bulletExplosionList[e].y - bulletExplosion[1].h / 2,
-          bulletExplosion[1].w, bulletExplosion[1].h
-        );
+        explosionList[e].draw(0);
+        explosionList[e].draw(1);
     }
 
     // Draw particles
@@ -543,7 +553,7 @@ if (!window.requestAnimationFrame)
           // Old style method
           function (callback, element)
           {
-              window.setTimeout(callback, 1000 / 60);
+              window.setTimeout(callback, 1000 / FRAME_RATE);
           };
     })();
 }
