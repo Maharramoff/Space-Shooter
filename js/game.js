@@ -121,6 +121,19 @@ class Bullet
     {
         return this.x + BULLET_SPRITE.w < 0 || this.x > STAGE.x || this.y < 0;
     }
+
+    hit(target)
+    {
+        return (
+          this.x > target.x
+          &&
+          this.x < target.x + target.w
+          &&
+          this.y < target.y + target.h
+          &&
+          this.y > target.y
+        );
+    }
 }
 
 class Ship
@@ -278,15 +291,7 @@ function update()
         {
             if (asteroidList.hasOwnProperty(i) && bulletList.hasOwnProperty(b))
             {
-                if (
-                  bulletList[b].x > asteroidList[i].x
-                  &&
-                  bulletList[b].x < asteroidList[i].x + asteroidList[i].w
-                  &&
-                  bulletList[b].y < asteroidList[i].y + asteroidList[i].h
-                  &&
-                  bulletList[b].y > asteroidList[i].y
-                )
+                if(bulletList[b].hit(asteroidList[i]))
                 {
                     // Bullet explosion
                     bulletExplosionList.push({ x: bulletList[b].x, y: bulletList[b].y });
