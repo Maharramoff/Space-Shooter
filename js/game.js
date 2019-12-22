@@ -4,9 +4,9 @@ const spawnFrame = 30;
 const bulletExplosionFrame = 5;
 const particlesLiveTime = 100;
 const particlesDisposeSpeed = 3;
-const stage = { x: 600, y: 600 };
 const bulletSpeed = 15;
 const scoreFactor = 2;
+const STAGE = {x: 600, y: 600};
 let gameStarted = false;
 
 // Game will pause when paused == true
@@ -42,7 +42,8 @@ const particle = [
     { sx: 602, sy: 646, sw: 15, sh: 15, h: 15, w: 15 },
     { sx: 365, sy: 814, sw: 16, sh: 18, h: 16, w: 18 },
 ];
-const asteroids = [
+
+const ASTEROID_SPRITES = [
     { sx: 0, sy: 618, sw: 119, sh: 97, h: 45, w: 55 },
     { sx: 326, sy: 549, sw: 99, sh: 95, h: 53, w: 55 },
     { sx: 224, sy: 748, sw: 100, sh: 84, h: 46, w: 55 },
@@ -59,6 +60,7 @@ let alpha = 1;
 let particleLength = particle.length;
 let score = 0;
 let bgImageY = 0;
+let randomAsteroidIndex;
 
 // Game constructor
 function initGame()
@@ -69,8 +71,8 @@ function initGame()
     document.getElementById('game-stats').style.display = '';
     document.getElementById('game-score').innerText = '' + score;
 
-    ship.x = stage.x / 2 - ship.w / 2;
-    ship.y = stage.y - ship.h - 10;
+    ship.x = STAGE.x / 2 - ship.w / 2;
+    ship.y = STAGE.y - ship.h - 10;
 
     // Mouse Listeners
     canvas.addEventListener('mousemove', mouseMove, false)
@@ -123,26 +125,21 @@ function update()
 
     if (timer % spawnFrame === 0)
     {
-        let genObject = {
-            x : Math.random() * 600,
-            y : -50,
-            dx: getRandomInt(-1, 1),
-            dy: getRandomInt(4, 6),
-        };
+        randomAsteroidIndex = Math.floor(Math.random() * ASTEROID_SPRITES.length);
 
-        let randomAsteroid = asteroids[Math.floor(Math.random() * asteroids.length)];
-
-        asteroidList.push({ ...randomAsteroid, ...genObject });
+        asteroidList.push(new Asteroid(Math.random() * 600, -50, getRandomInt(-1, 1), getRandomInt(4, 6), randomAsteroidIndex));
     }
 
     for (let i in asteroidList)
     {
         // Asteroids physics
-        asteroidList[i].x += asteroidList[i].dx;
-        asteroidList[i].y += asteroidList[i].dy;
+        asteroidList[i].update();
 
         // Remove the asteroids that are out of stage.
-        if (asteroidList[i].x + asteroidList[i].w < 0 || asteroidList[i].x > 600 || asteroidList[i].y > 600) asteroidList.splice(i, 1);
+        if(asteroidList[i].outOfBounds())
+        {
+            asteroidList.splice(i, 1);
+        }
 
         // Check if target shot down
         for (let b in bulletList)
@@ -247,13 +244,13 @@ function draw()
 {
     // Draw background
     context.drawImage(backgroundImage, 0, bgImageY, 600, 600);
-    context.drawImage(backgroundImage, 0, bgImageY - stage.y, 600, 600);
+    context.drawImage(backgroundImage, 0, bgImageY - STAGE.y, 600, 600);
 
     // Update background height
     bgImageY += bgImageSpeed;
 
     // Reseting the images when the first image exits the screen
-    if (bgImageY === stage.y)
+    if (bgImageY === STAGE.y)
     {
         bgImageY = 0;
     }
@@ -301,16 +298,10 @@ function draw()
         }
     }
 
+    // Draw asteroid
     for (let i in asteroidList)
     {
-        // Draw asteroids
-        context.drawImage(
-          spriteSheet, //The image file
-          asteroidList[i].sx, asteroidList[i].sy, //The source x and y position
-          asteroidList[i].sw, asteroidList[i].sh, //The source width and height
-          asteroidList[i].x, asteroidList[i].y, //The destination x and y position
-          asteroidList[i].w, asteroidList[i].h //The destination height and width
-        );
+        asteroidList[i].draw();
     }
 
     // Draw Ship
@@ -341,20 +332,20 @@ function mouseMove(event)
     newX = event.offsetX - ship.w / 2;
     newY = event.offsetY - ship.h / 2;
 
-    if(newX <= 0)
+    if (newX <= 0)
     {
         newX = 0;
     }
-    else if (newX + ship.w >= stage.x)
+    else if (newX + ship.w >= STAGE.x)
     {
-        newX = stage.x - ship.w;
+        newX = STAGE.x - ship.w;
     }
 
-    if(newY + ship.h >= stage.y)
+    if (newY + ship.h >= STAGE.y)
     {
-        newY = stage.y - ship.h;
+        newY = STAGE.y - ship.h;
     }
-    else if(newY <= 0)
+    else if (newY <= 0)
     {
         newY = 0;
     }
@@ -455,4 +446,43 @@ window.addEventListener('keydown', function (event)
 
 }, true);
 
+class Asteroid
+{
+    constructor(x, y, dx, dy, spriteIndex)
+    {
+        let randomAsteroid = ASTEROID_SPRITES[spriteIndex];
 
+        this.y = y;
+        this.x = x;
+        this.dx = dx;
+        this.dy = dy;
+        this.sx = randomAsteroid.sx;
+        this.sy = randomAsteroid.sy;
+        this.sw = randomAsteroid.sw;
+        this.sh = randomAsteroid.sh;
+        this.h = randomAsteroid.h;
+        this.w = randomAsteroid.w;
+    }
+
+    update()
+    {
+        this.x += this.dx;
+        this.y += this.dy;
+    }
+
+    draw()
+    {
+        context.drawImage(
+          spriteSheet, //The image file
+          this.sx, this.sy, //The source x and y position
+          this.sw, this.sh, //The source width and height
+          this.x, this.y, //The destination x and y position
+          this.w, this.h //The destination height and width
+        );
+    }
+
+    outOfBounds()
+    {
+        return this.x + this.w < 0 || this.x > STAGE.x || this.y > STAGE.y;
+    }
+}
