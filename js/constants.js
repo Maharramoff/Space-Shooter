@@ -6,7 +6,7 @@ const STAGE = { x: 600, y: 600 };
 // Game defaults
 const FRAME_RATE = 30;
 const ASTEROID_SPAWN_INTERVAL = 30;
-const EXPLOSION_LIVETIME = 10;
+const EXPLOSION_FRAME_INTERVAL = 10;
 const PARTICLE_LIVETIME = 100;
 const PARTICLE_FADEOUT_SPEED = 3;
 const BULLET_SPEED = 15;
@@ -25,12 +25,21 @@ BACKGROUND_IMG.src = 'img/space.png';
 const SPRITE_SHEET = new Image();
 SPRITE_SHEET.src = 'img/sheet.png';
 
+// Explosion sprite sheet
+const EXPLOSION_SPRITE_SHEET = new Image();
+EXPLOSION_SPRITE_SHEET.src = 'img/explosion.png';
+
 // Sprites properties
 const SHIP_SPRITE = { sx: 0, sy: 942, sw: 112, sh: 74, h: 40, w: 60 };
 const BULLET_SPRITE = { sx: 856, sy: 602, sw: 9, sh: 37, h: 37, w: 9 };
 const EXPLOSION_SPRITE = [
-    { sx: 603, sy: 600, sw: 46, sh: 46, h: 46, w: 46 },
-    { sx: 581, sy: 661, sw: 46, sh: 46, h: 46, w: 46 },
+/*    { sx: 603, sy: 600, sw: 46, sh: 46, h: 46, w: 46 },
+    { sx: 581, sy: 661, sw: 46, sh: 46, h: 46, w: 46 },*/
+    { sx: 18, sy: 76, sw: 40, sh: 48, h: 40, w: 48 },
+    { sx: 68, sy: 70, sw: 55, sh: 55, h: 55, w: 55 },
+    { sx: 126, sy: 70, sw: 55, sh: 55, h: 55, w: 55 },
+    { sx: 185, sy: 70, sw: 55, sh: 55, h: 55, w: 55 },
+    { sx: 243, sy: 70, sw: 55, sh: 55, h: 55, w: 55 },
 ];
 const PARTICLE_SPRITE = [
     { sx: 396, sy: 414, sw: 29, sh: 25, h: 29, w: 25 },

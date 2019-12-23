@@ -89,11 +89,6 @@ class Game
         this.timer++;
         this.particlesDisposeFrames++;
 
-        if (this.timer % EXPLOSION_LIVETIME === 0)
-        {
-            this.explosionList = [];
-        }
-
         if (this.timer % ASTEROID_SPAWN_INTERVAL === 0)
         {
             this.randomAsteroidIndex = Math.floor(Math.random() * ASTEROID_SPRITE.length);
@@ -169,11 +164,14 @@ class Game
         for (let e in this.explosionList)
         {
             this.explosionList[e].update();
+
+            // Clear explosion frame if delete flag is true
+            if (this.explosionList[e].toDelete) this.explosionList.splice(e, 1);
         }
 
+        // Bullet physics
         for (let b in this.ship.bulletList)
         {
-            // Bullet physics
             this.ship.bulletList[b].update();
 
             // Remove the bullets that are out of stage.
@@ -227,8 +225,7 @@ class Game
         // Draw explosions
         for (let e in this.explosionList)
         {
-            this.explosionList[e].draw(1);
-            //this.explosionList[e].draw(1);
+            this.explosionList[e].draw();
         }
 
         // Draw particles
