@@ -39,8 +39,8 @@ class Particle
           SPRITE_SHEET,
           PARTICLE_SPRITE[this.index].sx, PARTICLE_SPRITE[this.index].sy,
           PARTICLE_SPRITE[this.index].sw, PARTICLE_SPRITE[this.index].sh,
-          this.x, this.y,
-          PARTICLE_SPRITE[this.index].w, PARTICLE_SPRITE[this.index].h
+          this.x - PARTICLE_SPRITE[this.index].w / 2, this.y - PARTICLE_SPRITE[this.index].h / 2,
+          PARTICLE_SPRITE[this.index].w / PARTICLE_SCALE_FACTOR, PARTICLE_SPRITE[this.index].h / PARTICLE_SCALE_FACTOR
         );
         CONTEXT.restore();
     }

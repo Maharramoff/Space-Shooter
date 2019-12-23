@@ -4,11 +4,14 @@ const CONTEXT = CANVAS.getContext('2d');
 const STAGE = { x: 600, y: 600 };
 
 // Game defaults
-const FRAME_RATE = 30;
+const FRAME_RATE = 60;
 const ASTEROID_SPAWN_INTERVAL = 30;
 const EXPLOSION_FRAME_INTERVAL = 10;
+const PARTICLE_ENABLED = false;
 const PARTICLE_LIVETIME = 100;
 const PARTICLE_FADEOUT_SPEED = 3;
+const PARTICLE_SCALE_FACTOR = 2.5;
+const PARTICLE_SPEED = 1;
 const BULLET_SPEED = 15;
 const SCORE_FACTOR = 2;
 

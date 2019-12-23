@@ -120,31 +120,34 @@ class Game
                 {
                     if (this.ship.bulletList[b].hit(this.asteroidList[i]))
                     {
-                        // Bullet explosion
+                        // Target explosion
                         this.explosionList.push(new Explosion(
                           this.asteroidList[i].x + this.asteroidList[i].w / 2,
-                          this.asteroidList[i].y + this.asteroidList[i].h / 2,
+                          this.asteroidList[i].y,
                           this.asteroidList[i].dx,
                           this.asteroidList[i].dy
                         ));
 
                         // Particles
-                        let particleObjects = [];
-
-                        for (let p = 0; p < this.particleLength; p++)
+                        if (PARTICLE_ENABLED)
                         {
-                            particleObjects.push(new Particle(
-                              this.ship.bulletList[b].x,
-                              this.ship.bulletList[b].y,
-                              (PARTICLE_SPRITE[p].w / 10) * Math.cos((p * 360 / this.particleLength) * (Math.PI / 180)),
-                              (PARTICLE_SPRITE[p].w / 10) * Math.sin((p * 360 / this.particleLength) * (Math.PI / 180)),
-                              PARTICLE_LIVETIME,
-                              this.alpha,
-                              p)
-                            );
-                        }
+                            let particleObjects = [];
 
-                        this.particleList.push(particleObjects);
+                            for (let p = 0; p < this.particleLength; p++)
+                            {
+                                particleObjects.push(new Particle(
+                                  this.asteroidList[i].x + this.asteroidList[i].w / 2,
+                                  this.asteroidList[i].y,
+                                  this.asteroidList[i].dx + PARTICLE_SPEED * Math.cos((p * 360 / this.particleLength) * (Math.PI / 180)),
+                                  this.asteroidList[i].dy + PARTICLE_SPEED * Math.sin((p * 360 / this.particleLength) * (Math.PI / 180)),
+                                  PARTICLE_LIVETIME,
+                                  this.alpha,
+                                  p)
+                                );
+                            }
+
+                            this.particleList.push(particleObjects);
+                        }
 
                         // Remove collided elements
                         this.ship.bulletList.splice(b, 1);
