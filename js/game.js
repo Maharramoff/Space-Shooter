@@ -6,7 +6,7 @@ const STAGE = { x: 600, y: 600 };
 // Game defaults
 const FRAME_RATE = 30;
 const ASTEROID_SPAWN_INTERVAL = 30;
-const EXPLOSION_LIVETIME = 30;
+const EXPLOSION_LIVETIME = 10;
 const PARTICLE_LIVETIME = 100;
 const PARTICLE_FADEOUT_SPEED = 3;
 const BULLET_SPEED = 15;
@@ -75,12 +75,20 @@ class Game
             return false;
         }
 
-        this.ship = new Ship(STAGE.x / 2 - SHIP_SPRITE.w / 2, STAGE.y - SHIP_SPRITE.h - 10);
+        this.ship = new Ship(STAGE.x / 2 - SHIP_SPRITE.w / 2, STAGE.y - SHIP_SPRITE.h - 10, Game);
         this.gameStarted = true;
 
         document.getElementById('game-starter').style.display = 'none';
         document.getElementById('game-stats').style.display = '';
         document.getElementById('game-score').innerText = '' + this.score;
+
+
+        let self = this;
+
+        CANVAS.addEventListener('mousedown', function (event)
+        {
+            self._mouseLeftClick(event);
+        });
 
         this._gameLoop();
     }
@@ -98,6 +106,25 @@ class Game
         }
 
         this.gamePaused = !this.gamePaused;
+    }
+
+    _mouseLeftClick(event)
+    {
+        if (Helper.mouseLeftClick(event))
+        {
+            // Ship fires
+            if(this.ship._fireBullet(event))
+            {
+
+                console.log("Fired!");
+
+                // Continue game animation if game paused
+                if (this.gamePaused)
+                {
+                    this.pauseOrResumeGame();
+                }
+            }
+        }
     }
 
     _gameLoop()
@@ -244,7 +271,7 @@ class Game
         // Draw explosions
         for (let e in this.explosionList)
         {
-            this.explosionList[e].draw(0);
+            this.explosionList[e].draw(1);
             //this.explosionList[e].draw(1);
         }
 
@@ -384,11 +411,6 @@ class Ship
         this.bulletList = [];
         let self = this;
 
-        CANVAS.addEventListener('mousedown', function (event)
-        {
-            self._fireBullet(event);
-        });
-
         CANVAS.addEventListener('mousemove', function (event)
         {
             self._move(event);
@@ -438,16 +460,16 @@ class Ship
         this.y = this.newY;
     }
 
-    _fireBullet(event)
+    _fireBullet()
     {
-        if (Helper.mouseLeftClick(event))
+        // Fire sound
+        new Audio(FIRE_SOUND).play().then(() =>
         {
             // Generate bullet
             this.bulletList.push(new Bullet(this.x + SHIP_SPRITE.w / 2 - BULLET_SPRITE.w / 2, this.y - SHIP_SPRITE.h / 2 - BULLET_SPRITE.h / 2, 0, BULLET_SPEED));
+        });
 
-            // Fire sound
-            new Audio(FIRE_SOUND).play().then(() => {});
-        }
+        return true;
     }
 }
 
