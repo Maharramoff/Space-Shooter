@@ -45,22 +45,6 @@ class Game
         this.gamePaused = !this.gamePaused;
     }
 
-    _mouseLeftClick(event)
-    {
-        if (Helper.mouseLeftClick(event))
-        {
-            // Ship fires
-            if (this.ship._fireBullet(event))
-            {
-                // Continue game animation if game paused
-                if (this.gamePaused)
-                {
-                    this.pauseOrResumeGame();
-                }
-            }
-        }
-    }
-
     _gameLoop()
     {
         if (this.gamePaused)
@@ -276,10 +260,25 @@ class Game
         document.getElementById('game-score').innerText = '' + this.score;
     }
 
+    _mouseLeftClick(event)
+    {
+        if (Helper.mouseLeftClick(event))
+        {
+            // Ship fires
+            if (this.gameRunning && this.ship._fireBullet())
+            {
+                // Continue game animation if game paused
+                if (this.gamePaused)
+                {
+                    this.pauseOrResumeGame();
+                }
+            }
+        }
+    }
+
     _mouseLeftClickListener()
     {
         let self = this;
-
         CANVAS.addEventListener('mousedown', function (event)
         {
             self._mouseLeftClick(event);
@@ -293,8 +292,35 @@ class Game
 
     _gameOver()
     {
-        document.getElementById('game-over').style.display = '';
         this.gameRunning = false;
+        document.getElementById('game-over').style.display = '';
+        new Audio(GAME_OVER_SOUND).play().then(() => {});
+        this._gameReset(6);
+    }
+
+    _gameReset(timeOutInSeconds)
+    {
+        let self = this;
+
+        setTimeout(
+          function ()
+          {
+              self._resetEventListeners();
+              self._resetGameVariables();
+              location.reload(); // TODO
+          }, timeOutInSeconds * 1000);
+    }
+
+    _resetEventListeners()
+    {
+        //TODO
+        void(0);
+    }
+
+    _resetGameVariables()
+    {
+        //TODO
+        void(0);
     }
 
 }

@@ -16,7 +16,7 @@ class Ship
 
     draw()
     {
-        if(this.destroyed !== true)
+        if (this.destroyed !== true)
         {
             CONTEXT.drawImage(SPRITE_SHEET,
               SHIP_SPRITE.sx, SHIP_SPRITE.sy,
