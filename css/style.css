@@ -24,9 +24,9 @@ fieldset ul {
     padding: 10px 20px;
     margin: 0;
     overflow: auto;
-/*    position: absolute;
-    top: 525px;
-    bottom: 0;*/
+    /*    position: absolute;
+        top: 525px;
+        bottom: 0;*/
 }
 
 fieldset li {
@@ -65,37 +65,99 @@ canvas {
 .blink {
     -webkit-animation: blink .75s linear infinite;
     -moz-animation: blink .75s linear infinite;
-    -ms-animation: blink .75s linear infinite;
     -o-animation: blink .75s linear infinite;
     animation: blink .75s linear infinite;
 }
+
 @-webkit-keyframes blink {
-    0% { opacity: 1; }
-    50% { opacity: 1; }
-    50.01% { opacity: 0; }
-    100% { opacity: 0; }
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 1;
+    }
+    50.01% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0;
+    }
 }
+
 @-moz-keyframes blink {
-    0% { opacity: 1; }
-    50% { opacity: 1; }
-    50.01% { opacity: 0; }
-    100% { opacity: 0; }
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 1;
+    }
+    50.01% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0;
+    }
 }
+
 @-ms-keyframes blink {
-    0% { opacity: 1; }
-    50% { opacity: 1; }
-    50.01% { opacity: 0; }
-    100% { opacity: 0; }
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 1;
+    }
+    50.01% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0;
+    }
 }
+
 @-o-keyframes blink {
-    0% { opacity: 1; }
-    50% { opacity: 1; }
-    50.01% { opacity: 0; }
-    100% { opacity: 0; }
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 1;
+    }
+    50.01% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0;
+    }
 }
+
 @keyframes blink {
-    0% { opacity: 1; }
-    50% { opacity: 1; }
-    50.01% { opacity: 0; }
-    100% { opacity: 0; }
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 1;
+    }
+    50.01% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+/* Game over */
+#game-over {
+    position: absolute;
+    top: 200px;
+    left: 20px;
+    right: 0;
+}
+
+#game-over p {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 110px;
+    line-height: 120px;
+    text-align: center;
+    text-shadow: 5px 5px #000000;
+    color: #ffffff;
 }

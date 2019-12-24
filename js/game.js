@@ -12,18 +12,18 @@ class Game
         this.score = 0;
         this.bgImageY = 0;
         this.randomAsteroidIndex = null;
-        this.gameStarted = false;
+        this.gameRunning = false;
         this.gamePaused = false;
     }
 
     start()
     {
-        if (this.gameStarted)
+        if (this.gameRunning)
         {
             return false;
         }
 
-        this.gameStarted = true;
+        this.gameRunning = true;
         this._initShip();
         this._setMenu();
         this._mouseLeftClickListener();
@@ -293,6 +293,8 @@ class Game
 
     _gameOver()
     {
+        document.getElementById('game-over').style.display = '';
+        this.gameRunning = false;
     }
 
 }
