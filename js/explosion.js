@@ -1,15 +1,18 @@
 class Explosion
 {
-    constructor(x, y, dx, dy)
+    constructor(x, y, dx, dy, explosionType)
     {
         this.y = y;
         this.x = x;
         this.dx = dx;
         this.dy = dy;
+        this.type = explosionType;
         this.explosionTimer = 0;
-        this.explosionFrameCount = EXPLOSION_SPRITE.length;
+        this.explosionSprite = EXPLOSION_SPRITE[this.type];
+        this.explosionFrameCount = this.explosionSprite.length;
         this.nextExplosionFrame = 0;
         this.toDelete = false;
+
     }
 
     update()
@@ -18,29 +21,31 @@ class Explosion
         this.y += this.dy;
     }
 
-    draw(index)
+    draw()
     {
 
-        CONTEXT.drawImage(
-          EXPLOSION_SPRITE_SHEET,
-          EXPLOSION_SPRITE[this.nextExplosionFrame].sx, EXPLOSION_SPRITE[this.nextExplosionFrame].sy,
-          EXPLOSION_SPRITE[this.nextExplosionFrame].sw, EXPLOSION_SPRITE[this.nextExplosionFrame].sh,
-          this.x - EXPLOSION_SPRITE[this.nextExplosionFrame].w / 2, this.y - EXPLOSION_SPRITE[this.nextExplosionFrame].h / 2,
-          EXPLOSION_SPRITE[this.nextExplosionFrame].w, EXPLOSION_SPRITE[this.nextExplosionFrame].h
-        );
+        if (this.nextExplosionFrame < this.explosionFrameCount && this.toDelete !== true)
+        {
+            CONTEXT.drawImage(
+              EXPLOSION_SPRITE_SHEET[this.type],
+              this.explosionSprite[this.nextExplosionFrame].sx, this.explosionSprite[this.nextExplosionFrame].sy,
+              this.explosionSprite[this.nextExplosionFrame].sw, this.explosionSprite[this.nextExplosionFrame].sh,
+              this.x - this.explosionSprite[this.nextExplosionFrame].w / 2, this.y - this.explosionSprite[this.nextExplosionFrame].h / 2,
+              this.explosionSprite[this.nextExplosionFrame].w, this.explosionSprite[this.nextExplosionFrame].h
+            );
+        }
+        else
+        {
+            this.nextExplosionFrame = 0;
+            this.toDelete = true;
+        }
 
-        this.explosionTimer++;
-
-        if(this.explosionTimer > EXPLOSION_FRAME_INTERVAL)
+        if (this.explosionTimer > EXPLOSION_FRAME_INTERVAL)
         {
             this.explosionTimer = 0;
             this.nextExplosionFrame++;
         }
 
-        if(this.nextExplosionFrame > this.explosionFrameCount - 1)
-        {
-            this.nextExplosionFrame = 0;
-            this.toDelete = true;
-        }
+        this.explosionTimer++;
     }
 }

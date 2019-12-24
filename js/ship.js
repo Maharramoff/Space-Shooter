@@ -10,6 +10,7 @@ class Ship
         this.dx = dx;
         this.dy = dy;
         this.bulletList = [];
+        this.destroyed = false;
         let self = this;
 
         CANVAS.addEventListener('mousemove', function (event)
@@ -18,20 +19,35 @@ class Ship
         });
     }
 
-    update()
-    {
-        this.x += this.dx;
-        this.y += this.dy;
-    }
-
     draw()
     {
-        CONTEXT.drawImage(SPRITE_SHEET,
-          SHIP_SPRITE.sx, SHIP_SPRITE.sy,
-          SHIP_SPRITE.sw, SHIP_SPRITE.sh,
-          this.x,
-          this.y,
-          SHIP_SPRITE.w, SHIP_SPRITE.h);
+        if(this.destroyed !== true)
+        {
+            CONTEXT.drawImage(SPRITE_SHEET,
+              SHIP_SPRITE.sx, SHIP_SPRITE.sy,
+              SHIP_SPRITE.sw, SHIP_SPRITE.sh,
+              this.x,
+              this.y,
+              SHIP_SPRITE.w, SHIP_SPRITE.h);
+        }
+    }
+
+    collidesWith(object)
+    {
+        return (
+          this.x > object.x
+          &&
+          this.x < object.x + object.w
+          &&
+          this.y < object.y + object.h
+          &&
+          this.y > object.y
+        );
+    }
+
+    destroy()
+    {
+        this.destroyed = true;
     }
 
     _move(event)
@@ -59,6 +75,8 @@ class Ship
 
         this.x = this.newX;
         this.y = this.newY;
+        this.dx = event.movementX;
+        this.dy = event.movementY;
     }
 
     _fireBullet()

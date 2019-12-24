@@ -24,7 +24,7 @@ class Game
             return false;
         }
 
-        this.ship = new Ship(STAGE.x / 2 - SHIP_SPRITE.w / 2, STAGE.y - SHIP_SPRITE.h - 10, Game);
+        this.ship = new Ship(STAGE.x / 2 - SHIP_SPRITE.w / 2, STAGE.y - SHIP_SPRITE.h - 10);
         this.gameStarted = true;
 
         document.getElementById('game-starter').style.display = 'none';
@@ -125,7 +125,8 @@ class Game
                           this.asteroidList[i].x + this.asteroidList[i].w / 2,
                           this.asteroidList[i].y,
                           this.asteroidList[i].dx,
-                          this.asteroidList[i].dy
+                          this.asteroidList[i].dy,
+                          'asteroid'
                         ));
 
                         // Particles
@@ -160,6 +161,19 @@ class Game
                         this._scoreUpdate();
                     }
                 }
+            }
+
+            if (this.ship.collidesWith(this.asteroidList[i]) && this.ship.destroyed !== true)
+            {
+                // Ship explosion
+                this.ship.destroy();
+                this.explosionList.push(new Explosion(
+                  this.ship.x + SHIP_SPRITE.w / 2,
+                  this.ship.y,
+                  this.asteroidList[i].dx / 1.5,
+                  this.asteroidList[i].dy / 1.5,
+                  'ship'
+                ));
             }
         }
 
