@@ -8,6 +8,7 @@ class Asteroid
         this.x = x;
         this.dx = dx;
         this.dy = dy;
+        this.radius = (randomAsteroid.w + randomAsteroid.h) / 4;
         this.sx = randomAsteroid.sx;
         this.sy = randomAsteroid.sy;
         this.sw = randomAsteroid.sw;

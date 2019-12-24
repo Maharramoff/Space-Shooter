@@ -9,6 +9,7 @@ class Ship
         this.x = x;
         this.dx = dx;
         this.dy = dy;
+        this.radius = (SHIP_SPRITE.w + SHIP_SPRITE.h) / 4 //TODO
         this.bulletList = [];
         this.destroyed = false;
         this._mouseMoveListener();
@@ -29,15 +30,12 @@ class Ship
 
     collidesWith(object)
     {
-        return (
-          this.x > object.x
-          &&
-          this.x < object.x + object.w
-          &&
-          this.y < object.y + object.h
-          &&
-          this.y > object.y
-        );
+        return this.distanceBetween(object) < (this.radius + object.radius);
+    }
+
+    distanceBetween(object)
+    {
+        return Math.sqrt(Math.pow(this.x - object.x, 2) + Math.pow(this.y - object.y, 2));
     }
 
     destroy()
