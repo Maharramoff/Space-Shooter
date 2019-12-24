@@ -293,9 +293,15 @@ class Game
     _gameOver()
     {
         this.gameRunning = false;
-        document.getElementById('game-over').style.display = '';
-        new Audio(GAME_OVER_SOUND).play().then(() => {});
-        this._gameReset(6);
+        let self = this;
+
+        setTimeout(
+          function ()
+          {
+              document.getElementById('game-over').style.display = '';
+              new Audio(GAME_OVER_SOUND).play().then(() => {});
+              self._gameReset(6);
+          }, 2000);
     }
 
     _gameReset(timeOutInSeconds)

@@ -41,6 +41,7 @@ class Ship
     destroy()
     {
         this.destroyed = true;
+        new Audio(SHIP_BOOM_SOUND).play().then(() => {});
     }
 
     _move(event)
@@ -75,11 +76,10 @@ class Ship
     _fireBullet()
     {
         // Fire sound
-        new Audio(FIRE_SOUND).play().then(() =>
-        {
-            // Generate bullet
-            this.bulletList.push(new Bullet(this.x + SHIP_SPRITE.w / 2 - BULLET_SPRITE.w / 2, this.y - SHIP_SPRITE.h / 2 - BULLET_SPRITE.h / 2, 0, BULLET_SPEED));
-        });
+        new Audio(FIRE_SOUND).play().then(() => {});
+
+        // Generate bullet
+        this.bulletList.push(new Bullet(this.x + SHIP_SPRITE.w / 2 - BULLET_SPRITE.w / 2, this.y - SHIP_SPRITE.h / 2 - BULLET_SPRITE.h / 2, 0, BULLET_SPEED));
 
         return true;
     }

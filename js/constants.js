@@ -18,6 +18,7 @@ const SCORE_FACTOR = 2;
 // Sounds
 const BOOM_SOUND = 'sound/boom.mp3';
 const FIRE_SOUND = 'sound/fire.mp3';
+const SHIP_BOOM_SOUND = 'sound/ship-boom.mp3';
 const GAME_OVER_SOUND = 'sound/game-over.mp3';
 
 // Background image
