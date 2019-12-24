@@ -11,12 +11,7 @@ class Ship
         this.dy = dy;
         this.bulletList = [];
         this.destroyed = false;
-        let self = this;
-
-        CANVAS.addEventListener('mousemove', function (event)
-        {
-            self._move(event);
-        });
+        this._mouseMoveListener();
     }
 
     draw()
@@ -89,5 +84,14 @@ class Ship
         });
 
         return true;
+    }
+
+    _mouseMoveListener()
+    {
+        let self = this;
+        CANVAS.addEventListener('mousemove', function (event)
+        {
+            self._move(event);
+        });
     }
 }

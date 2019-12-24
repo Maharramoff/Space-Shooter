@@ -18,26 +18,15 @@ class Game
 
     start()
     {
-
         if (this.gameStarted)
         {
             return false;
         }
 
-        this.ship = new Ship(STAGE.x / 2 - SHIP_SPRITE.w / 2, STAGE.y - SHIP_SPRITE.h - 10);
         this.gameStarted = true;
-
-        document.getElementById('game-starter').style.display = 'none';
-        document.getElementById('game-stats').style.display = '';
-        document.getElementById('game-score').innerText = '' + this.score;
-
-        let self = this;
-
-        CANVAS.addEventListener('mousedown', function (event)
-        {
-            self._mouseLeftClick(event);
-        });
-
+        this._initShip();
+        this._setMenu();
+        this._mouseLeftClickListener();
         this._gameLoop();
     }
 
@@ -163,7 +152,7 @@ class Game
                 }
             }
 
-            if (this.ship.collidesWith(this.asteroidList[i]) && this.ship.destroyed !== true)
+            if (this.asteroidList.hasOwnProperty(i) && this.ship.collidesWith(this.asteroidList[i]) && this.ship.destroyed !== true)
             {
                 // Ship explosion
                 this.ship.destroy();
@@ -174,6 +163,7 @@ class Game
                   this.asteroidList[i].dy / 1.5,
                   'ship'
                 ));
+                this._gameOver();
             }
         }
 
@@ -278,5 +268,32 @@ class Game
         this.score += SCORE_FACTOR;
         document.getElementById('game-score').innerText = '' + this.score;
     }
+
+    _setMenu()
+    {
+        document.getElementById('game-starter').style.display = 'none';
+        document.getElementById('game-stats').style.display = '';
+        document.getElementById('game-score').innerText = '' + this.score;
+    }
+
+    _mouseLeftClickListener()
+    {
+        let self = this;
+
+        CANVAS.addEventListener('mousedown', function (event)
+        {
+            self._mouseLeftClick(event);
+        });
+    }
+
+    _initShip()
+    {
+        this.ship = new Ship(STAGE.x / 2 - SHIP_SPRITE.w / 2, STAGE.y - SHIP_SPRITE.h - 10);
+    }
+
+    _gameOver()
+    {
+    }
+
 }
 
