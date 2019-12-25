@@ -32,6 +32,13 @@ class Asteroid
           this.x, this.y, //The destination x and y position
           this.w, this.h //The destination height and width
         );
+
+        this.rotate(10);
+    }
+
+    rotate(degree)
+    {
+        //TODO
     }
 
     outOfBounds()

@@ -3,13 +3,14 @@ class Ship
     newX;
     newY;
 
-    constructor(x, y, dx, dy)
+    constructor(startX, startY, shipType, shipLevel)
     {
-        this.y = y;
-        this.x = x;
-        this.dx = dx;
-        this.dy = dy;
-        this.radius = (SHIP_SPRITE.w + SHIP_SPRITE.h) / 4 //TODO
+        this.shipType = shipType;
+        this.shipLevel = shipLevel;
+        this.shipSprite = SHIP_SPRITE[this.shipType][this.shipLevel];
+        this.x = startX / 2 - this.shipSprite.w / 2;
+        this.y = startY - this.shipSprite.h - 5;
+        this.radius = (this.shipSprite.w + this.shipSprite.h) / 4 //TODO
         this.bulletList = [];
         this.destroyed = false;
         this._mouseMoveListener();
@@ -22,11 +23,11 @@ class Ship
         if (this.destroyed !== true)
         {
             CONTEXT.drawImage(SHIP_SPRITE_SHEET,
-              SHIP_SPRITE.sx, SHIP_SPRITE.sy,
-              SHIP_SPRITE.sw, SHIP_SPRITE.sh,
+              this.shipSprite.sx, this.shipSprite.sy,
+              this.shipSprite.sw, this.shipSprite.sh,
               this.x,
               this.y,
-              SHIP_SPRITE.w, SHIP_SPRITE.h);
+              this.shipSprite.w, this.shipSprite.h);
         }
     }
 
@@ -48,21 +49,21 @@ class Ship
 
     _move(event)
     {
-        this.newX = event.offsetX - SHIP_SPRITE.w / 2;
-        this.newY = event.offsetY - SHIP_SPRITE.h / 2;
+        this.newX = event.offsetX - this.shipSprite.w / 2;
+        this.newY = event.offsetY - this.shipSprite.h / 2;
 
         if (this.newX <= 0)
         {
             this.newX = 0;
         }
-        else if (this.newX + SHIP_SPRITE.w >= STAGE.x)
+        else if (this.newX + this.shipSprite.w >= STAGE.x)
         {
-            this.newX = STAGE.x - SHIP_SPRITE.w;
+            this.newX = STAGE.x - this.shipSprite.w;
         }
 
-        if (this.newY + SHIP_SPRITE.h >= STAGE.y)
+        if (this.newY + this.shipSprite.h >= STAGE.y)
         {
-            this.newY = STAGE.y - SHIP_SPRITE.h;
+            this.newY = STAGE.y - this.shipSprite.h;
         }
         else if (this.newY <= 0)
         {
@@ -81,7 +82,7 @@ class Ship
         Helper.playSound(this.fireSound);
 
         // Generate bullet
-        this.bulletList.push(new Bullet(this.x + SHIP_SPRITE.w / 2 - BULLET_SPRITE.w / 2, this.y - SHIP_SPRITE.h / 2 - BULLET_SPRITE.h / 2, 0, BULLET_SPEED));
+        this.bulletList.push(new Bullet(this.x + this.shipSprite.w / 2 - BULLET_SPRITE.w / 2, this.y - 50, 0, BULLET_SPEED));
 
         return true;
     }

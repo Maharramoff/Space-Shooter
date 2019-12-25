@@ -142,7 +142,7 @@ class Game
                 // Ship explosion
                 this.ship.destroy();
                 this.explosionList.push(new Explosion(
-                  this.ship.x + SHIP_SPRITE.w / 2,
+                  this.ship.x + this.ship.shipSprite.w / 2,
                   this.ship.y,
                   this.asteroidList[i].dx / 1.5,
                   this.asteroidList[i].dy / 1.5,
@@ -288,7 +288,9 @@ class Game
 
     _initShip()
     {
-        this.ship = new Ship(STAGE.x / 2 - SHIP_SPRITE.w / 2, STAGE.y - SHIP_SPRITE.h - 10);
+        let shipType = 'blue';
+        let shipLevel = 0;
+        this.ship = new Ship(STAGE.x, STAGE.y, shipType, shipLevel);
     }
 
     _gameOver()

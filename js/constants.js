@@ -41,7 +41,15 @@ EXPLOSION_SPRITE_SHEET.ship.src = 'img/ship-explosion.png';
 
 // Sprites properties
 //const SHIP_SPRITE = { sx: 0, sy: 942, sw: 112, sh: 74, h: 40, w: 60 };
-const SHIP_SPRITE = { sx: 63, sy: 86, sw: 80, sh: 64, h: 80, w: 64 };
+const SHIP_SPRITE = {
+    'blue': [
+        { sx: 63, sy: 86, sw: 80, sh: 64, w: 64, h: 80},
+    ],
+    'red': [
+        { sx: 68, sy: 216, sw: 70, sh: 66, w: 70, h: 66},
+    ]
+
+};
 const BULLET_SPRITE = { sx: 856, sy: 602, sw: 9, sh: 37, h: 37, w: 9 };
 const EXPLOSION_SPRITE = {
     'ship': [
