@@ -43,6 +43,6 @@ class Asteroid
 
     outOfBounds()
     {
-        return this.x + this.w < 0 || this.x > STAGE.x || this.y > STAGE.y;
+        return this.x + this.w < 0 || this.x > STAGE.width || this.y > STAGE.height;
     }
 }

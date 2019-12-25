@@ -1,18 +1,19 @@
 // Global constants
+const STAGE = { width: 750, height: 750 };
 const CANVAS = document.getElementById('game');
 const CONTEXT = CANVAS.getContext('2d');
-const STAGE = { x: 600, y: 600 };
-
+CANVAS.width = STAGE.width;
+CANVAS.height = STAGE.height;
 // Game defaults
 const FRAME_RATE = 30;
-const ASTEROID_SPAWN_INTERVAL = 30;
+const ASTEROID_SPAWN_INTERVAL = 45;
 const EXPLOSION_FRAME_INTERVAL = 10;
 const PARTICLE_ENABLED = false;
 const PARTICLE_LIVETIME = 100;
 const PARTICLE_FADEOUT_SPEED = 3;
 const PARTICLE_SCALE_FACTOR = 2.5;
 const PARTICLE_SPEED = 1;
-const BULLET_SPEED = 15;
+const BULLET_SPEED = 10;
 const SCORE_FACTOR = 2;
 
 // Sounds

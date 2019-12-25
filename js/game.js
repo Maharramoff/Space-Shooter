@@ -68,7 +68,7 @@ class Game
             this.randomAsteroidIndex = Math.floor(Math.random() * ASTEROID_SPRITE.length);
 
             this.asteroidList.push(new Asteroid(
-              Math.random() * 600,
+              Helper.getRandomInt(0, STAGE.width),
               -50,
               Helper.getRandomInt(-1, 1),
               Helper.getRandomInt(4, 6),
@@ -196,20 +196,20 @@ class Game
             }
         }
 
-        if (this.timer > FRAME_RATE) this.timer = 0;
+        //if (this.timer > FRAME_RATE) this.timer = 0;
     }
 
     _draw()
     {
         // Draw background
-        CONTEXT.drawImage(BACKGROUND_IMG, 0, this.bgImageY, 600, 600);
-        CONTEXT.drawImage(BACKGROUND_IMG, 0, this.bgImageY - STAGE.y, 600, 600);
+        CONTEXT.drawImage(BACKGROUND_IMG, 0, this.bgImageY, STAGE.width, STAGE.height);
+        CONTEXT.drawImage(BACKGROUND_IMG, 0, this.bgImageY - STAGE.height, STAGE.width, STAGE.height);
 
         // Update background height
         this.bgImageY += BACKGROUND_IMG_SCROLL_SPEED;
 
         // Reseting the images when the first image exits the screen
-        if (this.bgImageY === STAGE.y)
+        if (this.bgImageY === STAGE.height)
         {
             this.bgImageY = 0;
         }
@@ -290,7 +290,7 @@ class Game
     {
         let shipType = 'red';
         let shipLevel = 0;
-        this.ship = new Ship(STAGE.x, STAGE.y, shipType, shipLevel);
+        this.ship = new Ship(STAGE.width, STAGE.height, shipType, shipLevel);
     }
 
     _gameOver()
