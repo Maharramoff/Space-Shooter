@@ -32,14 +32,15 @@ class Bullet
 
     hit(target)
     {
+
         return (
-          this.x > target.x
+          (this.x >= target.x || (this.x + BULLET_SPRITE.w) >= target.x)
           &&
-          this.x < target.x + target.w
+          (this.x <= target.x + target.w)
           &&
-          this.y < target.y + target.h
+          this.y <= target.y + target.h
           &&
-          this.y > target.y
+          this.y >= target.y
         );
     }
 }

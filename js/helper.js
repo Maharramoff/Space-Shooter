@@ -35,4 +35,11 @@ class Helper
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
+
+    static playSound(sound)
+    {
+        sound.pause();
+        sound.currentTime = 0;
+        sound.play().then(() => {});
+    }
 }

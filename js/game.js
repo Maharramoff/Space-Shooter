@@ -28,6 +28,7 @@ class Game
         this._setMenu();
         this._mouseLeftClickListener();
         this._gameLoop();
+        this._initSounds();
     }
 
     pauseOrResumeGame()
@@ -128,7 +129,7 @@ class Game
                         this.asteroidList.splice(i, 1);
 
                         // Boom sound
-                        new Audio(BOOM_SOUND).play().then(() => {});
+                        Helper.playSound(this.booomSound);
 
                         // Update score
                         this._scoreUpdate();
@@ -299,7 +300,7 @@ class Game
           function ()
           {
               document.getElementById('game-over').style.display = '';
-              new Audio(GAME_OVER_SOUND).play().then(() => {});
+              Helper.playSound(self.gameOverSound);
               self._gameReset(6);
           }, 2000);
     }
@@ -327,6 +328,12 @@ class Game
     {
         //TODO
         void(0);
+    }
+
+    _initSounds()
+    {
+        this.booomSound = new Audio(BOOM_SOUND);
+        this.gameOverSound = new Audio(GAME_OVER_SOUND);
     }
 
 }

@@ -13,13 +13,15 @@ class Ship
         this.bulletList = [];
         this.destroyed = false;
         this._mouseMoveListener();
+        this.fireSound = new Audio(FIRE_SOUND);
+        this.shipBoomSound = new Audio(SHIP_BOOM_SOUND);
     }
 
     draw()
     {
         if (this.destroyed !== true)
         {
-            CONTEXT.drawImage(SPRITE_SHEET,
+            CONTEXT.drawImage(SHIP_SPRITE_SHEET,
               SHIP_SPRITE.sx, SHIP_SPRITE.sy,
               SHIP_SPRITE.sw, SHIP_SPRITE.sh,
               this.x,
@@ -41,7 +43,7 @@ class Ship
     destroy()
     {
         this.destroyed = true;
-        new Audio(SHIP_BOOM_SOUND).play().then(() => {});
+        Helper.playSound(this.shipBoomSound);
     }
 
     _move(event)
@@ -76,7 +78,7 @@ class Ship
     _fireBullet()
     {
         // Fire sound
-        new Audio(FIRE_SOUND).play().then(() => {});
+        Helper.playSound(this.fireSound);
 
         // Generate bullet
         this.bulletList.push(new Bullet(this.x + SHIP_SPRITE.w / 2 - BULLET_SPRITE.w / 2, this.y - SHIP_SPRITE.h / 2 - BULLET_SPRITE.h / 2, 0, BULLET_SPEED));

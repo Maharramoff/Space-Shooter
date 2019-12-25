@@ -4,7 +4,7 @@ const CONTEXT = CANVAS.getContext('2d');
 const STAGE = { x: 600, y: 600 };
 
 // Game defaults
-const FRAME_RATE = 60;
+const FRAME_RATE = 30;
 const ASTEROID_SPAWN_INTERVAL = 30;
 const EXPLOSION_FRAME_INTERVAL = 10;
 const PARTICLE_ENABLED = false;
@@ -30,13 +30,18 @@ BACKGROUND_IMG.src = 'img/space.png';
 const SPRITE_SHEET = new Image();
 SPRITE_SHEET.src = 'img/sheet.png';
 
+// Ship sprite sheet
+const SHIP_SPRITE_SHEET = new Image();
+SHIP_SPRITE_SHEET.src = 'img/ship-sheet.png';
+
 // Explosion sprite sheet
 const EXPLOSION_SPRITE_SHEET = { 'asteroid': new Image(), 'ship': new Image() };
 EXPLOSION_SPRITE_SHEET.asteroid.src = 'img/asteroid-explosion.png';
 EXPLOSION_SPRITE_SHEET.ship.src = 'img/ship-explosion.png';
 
 // Sprites properties
-const SHIP_SPRITE = { sx: 0, sy: 942, sw: 112, sh: 74, h: 40, w: 60 };
+//const SHIP_SPRITE = { sx: 0, sy: 942, sw: 112, sh: 74, h: 40, w: 60 };
+const SHIP_SPRITE = { sx: 63, sy: 86, sw: 80, sh: 64, h: 80, w: 64 };
 const BULLET_SPRITE = { sx: 856, sy: 602, sw: 9, sh: 37, h: 37, w: 9 };
 const EXPLOSION_SPRITE = {
     'ship': [
@@ -67,6 +72,11 @@ const PARTICLE_SPRITE = [
     { sx: 365, sy: 814, sw: 16, sh: 18, h: 16, w: 18 },
 ];
 const ASTEROID_SPRITE = [
+
+    { sx: 0, sy: 520, sw: 119, sh: 97, h: 45, w: 55 },
+    { sx: 326, sy: 453, sw: 99, sh: 95, h: 53, w: 55 },
+    { sx: 224, sy: 664, sw: 102, sh: 84, h: 45, w: 55 },
+
     { sx: 0, sy: 618, sw: 119, sh: 97, h: 45, w: 55 },
     { sx: 326, sy: 549, sw: 99, sh: 95, h: 53, w: 55 },
     { sx: 224, sy: 748, sw: 100, sh: 84, h: 46, w: 55 },
