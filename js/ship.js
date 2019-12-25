@@ -57,14 +57,14 @@ class Ship
         {
             this.newX = 0;
         }
-        else if (this.newX + this.shipSprite.w >= STAGE.x)
+        else if (this.newX + this.shipSprite.w >= STAGE.width)
         {
-            this.newX = STAGE.x - this.shipSprite.w;
+            this.newX = STAGE.width - this.shipSprite.w;
         }
 
-        if (this.newY + this.shipSprite.h >= STAGE.y)
+        if (this.newY + this.shipSprite.h >= STAGE.height)
         {
-            this.newY = STAGE.y - this.shipSprite.h;
+            this.newY = STAGE.height - this.shipSprite.h;
         }
         else if (this.newY <= 0)
         {
@@ -83,7 +83,7 @@ class Ship
         Helper.playSound(this.fireSound);
 
         // Generate bullet
-        this.bulletList.push(new Bullet(this.x, this.y, 0, BULLET_SPEED, this.shipSprite, this.launcherSide));
+        this.bulletList.push(new Bullet(this.x, this.y, (this.launcherSide === 'left' ? 0.7 : -0.7), BULLET_SPEED, this.shipSprite, this.launcherSide));
         this.launcherSide = this.launcherSide === 'left' ? 'right' : 'left';
 
         return true;

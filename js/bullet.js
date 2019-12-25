@@ -5,12 +5,32 @@ class Bullet
         this._setBulletStartPoints(startX, startY, shipSprite, launcherSide)
         this.dx = startDx;
         this.dy = startDy;
+        this.centerX = startX + shipSprite.w / 2 - BULLET_SPRITE.w /2;
+        this.launcherSide = launcherSide;
     }
 
     update()
     {
+        // The bullet should not deviate from the center.
+        if (this.launcherSide === 'left')
+        {
+            if (this.x >= this.centerX)
+            {
+                this.dx = 0;
+            }
+        }
+        else
+        {
+            if (this.x <= this.centerX)
+            {
+                this.dx = 0;
+            }
+        }
+
         this.x += this.dx;
         this.y -= this.dy;
+
+        console.log(this.centerX);
     }
 
     draw()
@@ -26,7 +46,7 @@ class Bullet
 
     outOfBounds()
     {
-        return this.x + BULLET_SPRITE.w < 0 || this.x > STAGE.x || this.y < 0;
+        return this.x + BULLET_SPRITE.w < 0 || this.x > STAGE.width || this.y < 0;
     }
 
     hit(target)
