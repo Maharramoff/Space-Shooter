@@ -1,11 +1,10 @@
 class Bullet
 {
-    constructor(x, y, dx, dy)
+    constructor(startX, startY, startDx, startDy, shipSprite, launcherSide)
     {
-        this.y = y;
-        this.x = x;
-        this.dx = dx;
-        this.dy = dy;
+        this._setBulletStartPoints(startX, startY, shipSprite, launcherSide)
+        this.dx = startDx;
+        this.dy = startDy;
     }
 
     update()
@@ -42,5 +41,15 @@ class Bullet
           &&
           this.y >= target.y
         );
+    }
+
+    _setBulletStartPoints(startX, startY, shipSprite, launcherSide)
+    {
+        let launcherCenterX = shipSprite.launchers.small[launcherSide].sx + shipSprite.launchers.small[launcherSide].sw / 2;
+
+        // Calculate bullet launch points
+        this.x = startX + launcherCenterX - shipSprite.sx - BULLET_SPRITE.w / 2;
+        this.y = startY + (shipSprite.launchers.small[launcherSide].sy - shipSprite.sy) - BULLET_SPRITE.h;
+
     }
 }

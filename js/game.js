@@ -288,7 +288,7 @@ class Game
 
     _initShip()
     {
-        let shipType = 'blue';
+        let shipType = 'red';
         let shipLevel = 0;
         this.ship = new Ship(STAGE.x, STAGE.y, shipType, shipLevel);
     }

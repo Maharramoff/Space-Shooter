@@ -2,6 +2,7 @@ class Ship
 {
     newX;
     newY;
+    launcherSide = 'left';
 
     constructor(startX, startY, shipType, shipLevel)
     {
@@ -82,7 +83,8 @@ class Ship
         Helper.playSound(this.fireSound);
 
         // Generate bullet
-        this.bulletList.push(new Bullet(this.x + this.shipSprite.w / 2 - BULLET_SPRITE.w / 2, this.y - 50, 0, BULLET_SPEED));
+        this.bulletList.push(new Bullet(this.x, this.y, 0, BULLET_SPEED, this.shipSprite, this.launcherSide));
+        this.launcherSide = this.launcherSide === 'left' ? 'right' : 'left';
 
         return true;
     }
