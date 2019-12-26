@@ -84,7 +84,7 @@ class Game
             // Remove the asteroids that are out of stage.
             if (this.asteroidList[i].outOfBounds())
             {
-                this.asteroidList.splice(i, 1);
+                Helper.removeIndex(this.asteroidList, i);
             }
 
             // Check if target shot down
@@ -125,8 +125,8 @@ class Game
                         }
 
                         // Remove collided elements
-                        this.ship.bulletList.splice(b, 1);
-                        this.asteroidList.splice(i, 1);
+                        Helper.removeIndex(this.ship.bulletList, b);
+                        Helper.removeIndex(this.asteroidList, i);
 
                         // Boom sound
                         Helper.playSound(this.booomSound);
@@ -158,7 +158,10 @@ class Game
             this.explosionList[e].update();
 
             // Clear explosion frame if delete flag is true
-            if (this.explosionList[e].toDelete) this.explosionList.splice(e, 1);
+            if (this.explosionList[e].toDelete)
+            {
+                Helper.removeIndex(this.explosionList, e);
+            }
         }
 
         // Bullet physics
@@ -167,7 +170,10 @@ class Game
             this.ship.bulletList[b].update();
 
             // Remove the bullets that are out of stage.
-            if (this.ship.bulletList[b].outOfBounds()) this.ship.bulletList.splice(b, 1);
+            if (this.ship.bulletList[b].outOfBounds())
+            {
+                Helper.removeIndex(this.ship.bulletList, b);
+            }
         }
 
         for (let p in this.particleList)
@@ -323,13 +329,13 @@ class Game
     _resetEventListeners()
     {
         //TODO
-        void(0);
+        void (0);
     }
 
     _resetGameVariables()
     {
         //TODO
-        void(0);
+        void (0);
     }
 
     _initSounds()

@@ -42,4 +42,30 @@ class Helper
         sound.currentTime = 0;
         sound.play().then(() => {});
     }
+
+    /*
+    Delete an element from an array without
+    having to create a new array in the process
+    to keep garbage collection at a minimum
+    */
+    static removeIndex(array, index)
+    {
+
+        if (index >= array.length)
+        {
+            console.error('ERROR: index is out of range');
+            return;
+        }
+
+        if (array.length <= 0)
+        {
+            console.error('ERROR: empty array');
+            return;
+        }
+
+        array[index] = array[array.length - 1];
+        array[array.length - 1] = undefined;
+
+        array.length = array.length - 1;
+    }
 }

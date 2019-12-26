@@ -37,7 +37,7 @@ class Bullet
         CONTEXT.arc(this.x + BULLET_SPRITE.radius, this.y + BULLET_SPRITE.radius, BULLET_SPRITE.radius, 0, 2 * Math.PI, false);
         CONTEXT.fillStyle = 'yellow';
         CONTEXT.fill();
-        CONTEXT.lineWidth = 3;
+        CONTEXT.lineWidth = 4;
         CONTEXT.strokeStyle = 'red';
         CONTEXT.stroke();
     }
