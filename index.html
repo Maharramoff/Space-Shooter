@@ -18,14 +18,22 @@
     <fieldset>
         <canvas id="game">Canvas not supported</canvas>
         <legend>Space Shooter</legend>
-        <ul id="game-starter">
-            <li><a href="javascript:void(0)" onclick="game.start()">Start Game!</a></li>
-            <li>Options (coming soon)</li>
-        </ul>
-        <ul id="game-stats" style="display: none">
-            <li><a href="javascript:void(0)" onclick="game.pauseOrResumeGame()" id="game-paused">Pause/Resume</a></li>
-            <li>Score: <em id="game-score"></em></li>
-        </ul>
+        <div id="game-starter">
+            <ul>
+                <li><a href="javascript:void(0)" onclick="game.start()">Start Game!</a></li>
+                <li>Options (coming soon)</li>
+            </ul>
+        </div>
+        <div id="game-stats" style="display: none">
+            <ul>
+                <li><a href="javascript:void(0)" onclick="game.pauseOrResumeGame()" id="game-paused">Pause/Resume</a>
+                </li>
+                <li>Score: <em id="game-score"></em></li>
+            </ul>
+            <ul>
+                <li>Combo: <em id="game-combo"></em></li>
+            </ul>
+        </div>
     </fieldset>
 </div>
 

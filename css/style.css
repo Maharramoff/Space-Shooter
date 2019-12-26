@@ -23,10 +23,11 @@ fieldset ul {
     padding: 10px 20px;
     margin: 0;
     overflow: auto;
+    float: left;
 }
 
 fieldset li {
-    margin: 20px 0;
+    margin: 10px 0;
     min-width: 50%;
 }
 
