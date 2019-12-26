@@ -5,7 +5,7 @@ class Bullet
         this._setBulletStartPoints(startX, startY, shipSprite, launcherSide)
         this.dx = startDx;
         this.dy = startDy;
-        this.centerX = startX + shipSprite.w / 2 - BULLET_SPRITE.w /2;
+        this.centerX = startX + shipSprite.w / 2 - BULLET_SPRITE.radius;
         this.launcherSide = launcherSide;
     }
 
@@ -29,19 +29,17 @@ class Bullet
 
         this.x += this.dx;
         this.y -= this.dy;
-
-        console.log(this.centerX);
     }
 
     draw()
     {
-        CONTEXT.drawImage(
-          SPRITE_SHEET,
-          BULLET_SPRITE.sx, BULLET_SPRITE.sy,
-          BULLET_SPRITE.sw, BULLET_SPRITE.sh,
-          this.x, this.y,
-          BULLET_SPRITE.w, BULLET_SPRITE.h
-        );
+        CONTEXT.beginPath();
+        CONTEXT.arc(this.x + BULLET_SPRITE.radius, this.y + BULLET_SPRITE.radius, BULLET_SPRITE.radius, 0, 2 * Math.PI, false);
+        CONTEXT.fillStyle = 'yellow';
+        CONTEXT.fill();
+        CONTEXT.lineWidth = 3;
+        CONTEXT.strokeStyle = 'red';
+        CONTEXT.stroke();
     }
 
     outOfBounds()
@@ -68,7 +66,7 @@ class Bullet
         let launcherCenterX = shipSprite.launchers.small[launcherSide].sx + shipSprite.launchers.small[launcherSide].sw / 2;
 
         // Calculate bullet launch points
-        this.x = startX + launcherCenterX - shipSprite.sx - BULLET_SPRITE.w / 2;
+        this.x = startX + launcherCenterX - shipSprite.sx - BULLET_SPRITE.radius;
         this.y = startY + (shipSprite.launchers.small[launcherSide].sy - shipSprite.sy) - BULLET_SPRITE.h;
 
     }

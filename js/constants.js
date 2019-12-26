@@ -6,7 +6,7 @@ CANVAS.width = STAGE.width;
 CANVAS.height = STAGE.height;
 // Game defaults
 const FRAME_RATE = 30;
-const ASTEROID_SPAWN_INTERVAL = 45;
+const ASTEROID_SPAWN_INTERVAL = 30;
 const EXPLOSION_FRAME_INTERVAL = 10;
 const PARTICLE_ENABLED = false;
 const PARTICLE_LIVETIME = 100;
@@ -17,9 +17,9 @@ const BULLET_SPEED = 10;
 const SCORE_FACTOR = 2;
 
 // Sounds
-const BOOM_SOUND = 'sound/boom.mp3';
+const BOOM_SOUND = 'sound/asteroid-explosion.mp3';
 const FIRE_SOUND = 'sound/fire.mp3';
-const SHIP_BOOM_SOUND = 'sound/ship-boom.mp3';
+const SHIP_BOOM_SOUND = 'sound/ship-explosion.mp3';
 const GAME_OVER_SOUND = 'sound/game-over.mp3';
 
 // Background image
@@ -83,7 +83,8 @@ const SHIP_SPRITE = {
     ]
 
 };
-const BULLET_SPRITE = { sx: 856, sy: 602, sw: 9, sh: 37, h: 37, w: 9 };
+//const BULLET_SPRITE = { sx: 856, sy: 602, sw: 9, sh: 37, h: 37, w: 9 };
+const BULLET_SPRITE = { radius: 4, h: 8, w: 8 };
 const EXPLOSION_SPRITE = {
     'ship'    : [
         { sx: 14, sy: 40, sw: 100, sh: 100, h: 100, w: 100 },
