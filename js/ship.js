@@ -17,6 +17,7 @@ class Ship
         this._mouseMoveListener();
         this.fireSound = new Audio(FIRE_SOUND);
         this.shipBoomSound = new Audio(SHIP_BOOM_SOUND);
+        this.doubleBulletTotal = 0;
     }
 
     draw()
@@ -84,6 +85,20 @@ class Ship
 
         // Generate bullet
         this.bulletList.push(new Bullet(this.x, this.y, (this.launcherSide === 'left' ? 0.5 : -0.5), BULLET_SPEED, this.shipSprite, this.launcherSide));
+
+        // Double fire bonus
+        if(this.doubleBulletTotal > 0)
+        {
+            this.bulletList.push(new Bullet(
+              (this.launcherSide === 'left' ? this.x - 15 : this.x + 15),
+              this.y,
+              (this.launcherSide === 'left' ? 0.5 : -0.5),
+              BULLET_SPEED,
+              this.shipSprite,
+              this.launcherSide));
+            this.doubleBulletTotal--;
+        }
+
         this.launcherSide = this.launcherSide === 'left' ? 'right' : 'left';
 
         return true;

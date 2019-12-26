@@ -14,6 +14,7 @@ class Game
         this.randomAsteroidIndex = null;
         this.gameRunning = false;
         this.gamePaused = false;
+        this.fireCombo = 0;
     }
 
     start()
@@ -85,6 +86,7 @@ class Game
             if (this.asteroidList[i].outOfBounds())
             {
                 Helper.removeIndex(this.asteroidList, i);
+                this._comboUpdate(true);
             }
 
             // Check if target shot down
@@ -131,8 +133,8 @@ class Game
                         Helper.removeIndex(this.ship.bulletList, b);
                         Helper.removeIndex(this.asteroidList, i);
 
-                        // Update score
                         this._scoreUpdate();
+                        this._comboUpdate();
                     }
                 }
             }
@@ -260,11 +262,39 @@ class Game
         document.getElementById('game-score').innerText = '' + this.score;
     }
 
+    _comboUpdate(reset)
+    {
+        // Last bonus not ended yet
+        if(this.ship.doubleBulletTotal > 0)
+        {
+            return;
+        }
+
+        if (reset)
+        {
+            this.fireCombo = 0;
+        }
+        else
+        {
+            this.fireCombo++;
+        }
+
+        // Giving the random number of double fire bonus
+        if(this.fireCombo >= FIRE_COMBO_FACTOR)
+        {
+            this.ship.doubleBulletTotal = Helper.getRandomInt(50, 75);
+            this.fireCombo = 0;
+        }
+
+        document.getElementById('game-combo').innerText = '' + this.fireCombo;
+    }
+
     _setMenu()
     {
         document.getElementById('game-starter').style.display = 'none';
         document.getElementById('game-stats').style.display = '';
         document.getElementById('game-score').innerText = '' + this.score;
+        document.getElementById('game-combo').innerText = '' + this.fireCombo;
     }
 
     _mouseLeftClick(event)

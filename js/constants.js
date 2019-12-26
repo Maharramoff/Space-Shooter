@@ -15,6 +15,7 @@ const PARTICLE_SCALE_FACTOR = 2.5;
 const PARTICLE_SPEED = 1;
 const BULLET_SPEED = 10;
 const SCORE_FACTOR = 2;
+const FIRE_COMBO_FACTOR = 10;
 
 // Sounds
 const BOOM_SOUND = 'sound/asteroid-explosion.mp3';
@@ -84,7 +85,7 @@ const SHIP_SPRITE = {
 
 };
 //const BULLET_SPRITE = { sx: 856, sy: 602, sw: 9, sh: 37, h: 37, w: 9 };
-const BULLET_SPRITE = { radius: 4, h: 8, w: 8 };
+const BULLET_SPRITE = { radius: 5, h: 10, w: 10 };
 const EXPLOSION_SPRITE = {
     'ship'    : [
         { sx: 14, sy: 40, sw: 100, sh: 100, h: 100, w: 100 },
