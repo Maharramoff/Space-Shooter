@@ -94,6 +94,9 @@ class Game
                 {
                     if (this.ship.bulletList[b].hit(this.asteroidList[i]))
                     {
+                        // Boom sound
+                        Helper.playSound(this.booomSound);
+
                         // Target explosion
                         this.explosionList.push(new Explosion(
                           this.asteroidList[i].x + this.asteroidList[i].w / 2,
@@ -127,9 +130,6 @@ class Game
                         // Remove collided elements
                         Helper.removeIndex(this.ship.bulletList, b);
                         Helper.removeIndex(this.asteroidList, i);
-
-                        // Boom sound
-                        Helper.playSound(this.booomSound);
 
                         // Update score
                         this._scoreUpdate();

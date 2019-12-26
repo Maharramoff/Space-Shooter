@@ -40,7 +40,7 @@ class Helper
     {
         sound.pause();
         sound.currentTime = 0;
-        sound.play().then(() => {});
+        sound.play().then(() => {}).catch(() => {})
     }
 
     /*

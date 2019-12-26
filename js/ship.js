@@ -83,7 +83,7 @@ class Ship
         Helper.playSound(this.fireSound);
 
         // Generate bullet
-        this.bulletList.push(new Bullet(this.x, this.y, (this.launcherSide === 'left' ? 0.1 : -0.1), BULLET_SPEED, this.shipSprite, this.launcherSide));
+        this.bulletList.push(new Bullet(this.x, this.y, (this.launcherSide === 'left' ? 0.5 : -0.5), BULLET_SPEED, this.shipSprite, this.launcherSide));
         this.launcherSide = this.launcherSide === 'left' ? 'right' : 'left';
 
         return true;
