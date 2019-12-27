@@ -5,7 +5,7 @@ const CONTEXT = CANVAS.getContext('2d');
 CANVAS.width = STAGE.width;
 CANVAS.height = STAGE.height;
 // Game defaults
-const FRAME_RATE = 30;
+const FRAME_RATE = 60;
 const ASTEROID_SPAWN_INTERVAL = 30;
 const EXPLOSION_FRAME_INTERVAL = 10;
 const PARTICLE_ENABLED = false;
@@ -15,7 +15,12 @@ const PARTICLE_SCALE_FACTOR = 2.5;
 const PARTICLE_SPEED = 1;
 const BULLET_SPEED = 10;
 const SCORE_FACTOR = 2;
-const FIRE_COMBO_FACTOR = 10;
+const COMBO_LEVEL_FACTORS = {
+    1: 5,
+    2: 10,
+    3: 15,
+};
+const MAX_COMBO_LEVEL = Object.keys(COMBO_LEVEL_FACTORS).length;
 
 // Sounds
 const BOOM_SOUND = 'sound/asteroid-explosion.mp3';

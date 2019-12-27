@@ -14,7 +14,6 @@ class Game
         this.randomAsteroidIndex = null;
         this.gameRunning = false;
         this.gamePaused = false;
-        this.fireCombo = 0;
     }
 
     start()
@@ -69,10 +68,10 @@ class Game
             this.randomAsteroidIndex = Math.floor(Math.random() * ASTEROID_SPRITE.length);
 
             this.asteroidList.push(new Asteroid(
-              Helper.getRandomInt(0, STAGE.width),
-              -50,
+              Helper.getRandomInt(30, STAGE.width - 30),
+              -60,
               Helper.getRandomInt(-1, 1),
-              Helper.getRandomInt(4, 6),
+              Helper.getRandomInt(4, 8),
               this.randomAsteroidIndex
             ));
         }
@@ -264,29 +263,34 @@ class Game
 
     _comboUpdate(reset)
     {
-        // Last bonus not ended yet
-        if(this.ship.doubleBulletTotal > 0)
-        {
-            return;
-        }
-
         if (reset)
         {
-            this.fireCombo = 0;
+            this.ship.fireCombo = 0;
         }
         else
         {
-            this.fireCombo++;
+            this.ship.fireCombo++;
         }
 
-        // Giving the random number of double fire bonus
-        if(this.fireCombo >= FIRE_COMBO_FACTOR)
+        this.ship.lastComboLevel = this.ship.comboLevel;
+
+        // Get Combo level
+        for (let key in COMBO_LEVEL_FACTORS)
         {
-            this.ship.doubleBulletTotal = Helper.getRandomInt(50, 75);
-            this.fireCombo = 0;
+            if(this.ship.fireCombo >= COMBO_LEVEL_FACTORS[key] && key > this.ship.lastComboLevel)
+            {
+                this.ship.comboLevel = key;
+            }
         }
 
-        document.getElementById('game-combo').innerText = '' + this.fireCombo;
+        // Giving the random number of fire bonus
+        if(this.ship.comboLevel > this.ship.lastComboLevel && this.ship.comboLevel <= MAX_COMBO_LEVEL)
+        {
+            this.ship.comboBulletTotal = Helper.getRandomInt(50, 150);
+            this.ship.fireCombo = 0;
+        }
+
+        document.getElementById('game-combo').innerText = '' + this.ship.fireCombo;
     }
 
     _setMenu()
@@ -294,7 +298,7 @@ class Game
         document.getElementById('game-starter').style.display = 'none';
         document.getElementById('game-stats').style.display = '';
         document.getElementById('game-score').innerText = '' + this.score;
-        document.getElementById('game-combo').innerText = '' + this.fireCombo;
+        document.getElementById('game-combo').innerText = '' + this.ship.fireCombo;
     }
 
     _mouseLeftClick(event)

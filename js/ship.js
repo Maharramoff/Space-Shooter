@@ -17,7 +17,10 @@ class Ship
         this._mouseMoveListener();
         this.fireSound = new Audio(FIRE_SOUND);
         this.shipBoomSound = new Audio(SHIP_BOOM_SOUND);
-        this.doubleBulletTotal = 0;
+        this.comboBulletTotal = 0;
+        this.comboLevel = 0;
+        this.fireCombo = 0;
+        this.lastComboLevel = 0;
     }
 
     draw()
@@ -86,17 +89,28 @@ class Ship
         // Generate bullet
         this.bulletList.push(new Bullet(this.x, this.y, (this.launcherSide === 'left' ? 0.5 : -0.5), BULLET_SPEED, this.shipSprite, this.launcherSide));
 
-        // Double fire bonus
-        if(this.doubleBulletTotal > 0)
+        // Combo Fire bonus
+        if (this.comboBulletTotal > 0)
         {
-            this.bulletList.push(new Bullet(
-              (this.launcherSide === 'left' ? this.x - 15 : this.x + 15),
-              this.y,
-              (this.launcherSide === 'left' ? 0.5 : -0.5),
-              BULLET_SPEED,
-              this.shipSprite,
-              this.launcherSide));
-            this.doubleBulletTotal--;
+            for (let i = 1; i <= this.comboLevel; i++)
+            {
+                this.bulletList.push(new Bullet(
+                  (this.launcherSide === 'left' ? this.x - 15 * i : this.x + 15 * i),
+                  this.y,
+                  (this.launcherSide === 'left' ? 0.5 : -0.5),
+                  BULLET_SPEED,
+                  this.shipSprite,
+                  this.launcherSide));
+            }
+
+            this.comboBulletTotal--;
+
+            // Reset combo level to zero if combo-bullets end
+            if(this.comboBulletTotal <= 0)
+            {
+                this.comboLevel = 0;
+                this.fireCombo = 0;
+            }
         }
 
         this.launcherSide = this.launcherSide === 'left' ? 'right' : 'left';
