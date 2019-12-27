@@ -6,7 +6,7 @@ class Asteroid
 
         this.y = y;
         this.x = x;
-        this.dx = dx;
+        this.dx = x <= 60 || x >= STAGE.width - 60 ? -dx : dx;
         this.dy = dy;
         this.radius = (randomAsteroid.w + randomAsteroid.h) / 4;
         this.sx = randomAsteroid.sx;
